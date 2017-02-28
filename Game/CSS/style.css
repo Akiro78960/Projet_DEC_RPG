@@ -6,11 +6,11 @@
     outline:0;
     font-size:100%;
     vertical-align:baseline;
-    background:transparent;
+    background:black;
 }
 
 .canvasHolder{
-    background-color: #DDDDDD;
+    background-color: black;
     margin: 10px auto;
     text-align: center;
 }
@@ -20,4 +20,5 @@
     height: 500px;
     border:1px solid black;
     margin:100px auto;
+    background-color: white;
 }
