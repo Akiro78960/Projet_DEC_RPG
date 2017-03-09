@@ -19,25 +19,25 @@ class View{
 
       // Our Tile Map
       var tileMap = [
-        [groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor],
-        [groundColor, tileColor, groundColor, tileColor, groundColor, tileColor, groundColor],
-        [groundColor, tileColor, tileColor, tileColor, groundColor, tileColor, groundColor],
-        [groundColor, tileColor, groundColor, tileColor, groundColor, tileColor, groundColor],
-        [groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor]
+        [groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor],
+        [groundColor, tileColor, groundColor, tileColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor],
+        [groundColor, tileColor, tileColor, tileColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor],
+        [groundColor, tileColor, groundColor, tileColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor],
+        [groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor]
       ]
 
       // Our Height Map
       var tileHeightMap = [
-        [0,0,0,0,0,0,0],
-        [0,1,0,1,0,1,0],
-        [0,1,1,1,0,2,0],
-        [0,4,0,4,0,3,0],
-        [0,0,0,0,0,0,0]
+        [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+        [0,1,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
+        [0,1,1,1,0,2,0,0,0,0,0,1,0,0,0,0,0,0,0],
+        [0,4,0,4,0,3,0,0,0,0,0,1,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]
       ]
 
       // X & Y drawing position, and tile span to draw
-      var xrange = 8;
-      var yrange = 8;
+      var xrange = 90;
+      var yrange = 90;
 
       // X & Y Coordinates of Ralph
       var ralphX = 1;
@@ -45,7 +45,8 @@ class View{
 
       var ralphGraphic = null; // Will contain the image of Raplh once it has been loaded
 
-      var context = CanvasControl.create("canvas", 640, 640, {}, "main");
+      var context = CanvasControl.create("canvas", 640, 640, {}, "main")
+      CanvasControl.fullScreen()
 
       // Two layers - one for the ground, second layer for objects, player objects, NPCS, pickups, etc etc
       var tileLayer = new TileField(context, CanvasControl().height, CanvasControl().width);
