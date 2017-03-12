@@ -3,7 +3,7 @@ class View{
 
     }
 
-    draw(){
+    draw(player){
         require([
       'jsiso/canvas/Control',
       'jsiso/tile/Field',
@@ -14,8 +14,8 @@ class View{
     function(CanvasControl, TileField, imgLoad, CanvasInput) {
 
       // RGBA of color to use
-      var tileColor = "(158, 154, 255, 0)";
-      var groundColor =  "(100, 154, 100, 0.8)";
+      var tileColor = "(158, 154, 255, 1)";
+      var groundColor =  "(100, 154, 100, 1)";
 
       // Our Tile Map
       var tileMap = [
@@ -28,22 +28,19 @@ class View{
 
       // Our Height Map
       var tileHeightMap = [
-        [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+        [0,1,2,2,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
         [0,1,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
-        [0,1,1,1,0,2,0,0,0,0,0,1,0,0,0,0,0,0,0],
+        [0,1,1,1,0,2,0,0,0,0,0,1,2,2,1,1,0,0,0],
         [0,4,0,4,0,3,0,0,0,0,0,1,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]
       ]
 
       // X & Y drawing position, and tile span to draw
-      var xrange = 90;
-      var yrange = 90;
+      var xrange = 15
+      var yrange = 15
 
-      // X & Y Coordinates of Ralph
-      var ralphX = 1;
-      var ralphY = 1;
-
-      var ralphGraphic = null; // Will contain the image of Raplh once it has been loaded
+      var ralphGraphic = null // Will contain the image of Raplh once it has been loaded
+      var image = null
 
       var context = CanvasControl.create("canvas", 640, 640, {}, "main")
       CanvasControl.fullScreen()
@@ -60,56 +57,61 @@ class View{
           switch(pressed) {
             // Move player
             case 37:
-              ralphX --;
+              player.localX --
             break;
             case 39:
-              ralphX ++;
-            break;
+              player.localX ++
+            break
             case 40:
-              ralphY ++;
-            break;
+              player.localY ++
+            break
             case 38:
-              ralphY -- ;
-            break;
+              player.localY --
+            break
           }
           // Call draw Tile Map function
-          drawTileMap();
+          drawTileMap()
         }
       });
-
-      var images = [
-        {
-          graphics: [
-            "/sprites/minecube.png" // The images we want to load using imgLoader
-          ]
-        },
-        {
-          graphics: [
-            "/sprites/image.png"
-          ]
-        }
-      ];
 
 
       function drawTileMap() {
         // Clear drawn map before clearing
-        context.clearRect(0, 0, CanvasControl().width, CanvasControl().height);
+        context.clearRect(0, 0, CanvasControl().width, CanvasControl().height)
         // Loop through our tiles and draw the map
         for (var i = 0; i < 0 + xrange; i++) {
           for (var j = 0; j < 0 + yrange; j++) {
-            tileLayer.draw(i, j);
-            if (i === ralphX && j === ralphY) {
-              objectLayer.draw(i, j, ralphGraphic);
+            tileLayer.draw(i, j)
+            if (i === player.localX && j === player.localY) {
+              objectLayer.draw(i, j, ralphGraphic)
             }
           }
         }
       }
+
+
+      var images = [
+          {
+              graphics: [
+                  "/sprites/minecube.png" // The images we want to load using imgLoader
+              ]
+          },
+          {
+              graphics: [
+                  "/sprites/image.png"
+              ]
+          }
+      ]
+
+
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
       imgLoad(images).then(function(imgResponse) {
 
         // set Raplphs image, imgResponse[1] because it was the second list of graphics to be loaded
         ralphGraphic = imgResponse[1].files["image.png"]
+        // image = imgResponse[1].files["image.png"]
+
 
         tileLayer.setup({
           title: "Ground Layer",
@@ -128,7 +130,7 @@ class View{
             verticalColor: '(5, 5, 30, 0.2)',
             horizontalColor: '(6, 5, 50, 0.3)'
           }
-        });
+        })
         // Object Layer
         objectLayer.setup({
           title: "Object Layer",
@@ -142,19 +144,21 @@ class View{
             offset: 50,
             heightMapOnTop: true// We want to draw only on top of the heightmap
           }
-        });
+        })
 
         // Rotate our entire Map
-        tileLayer.rotate("left");
-        objectLayer.rotate("left");
+        tileLayer.rotate("left")
+        objectLayer.rotate("left")
+        tileLayer.flip("vertical")
+        objectLayer.flip("vertical")
 
         // Set an offset so our map is on screen
-        tileLayer.setOffset(200, 200);
-        objectLayer.setOffset(200, 200);
+        tileLayer.setOffset(200, 200)
+        objectLayer.setOffset(200, 200)
 
         // Call draw Tile Map function
-        drawTileMap();
-      });
-    });
+        drawTileMap()
+      })
+    })
     }
 }
