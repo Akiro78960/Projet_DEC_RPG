@@ -1,10 +1,13 @@
 {
   "groundImages": [
-    "sprites/land.png",
-    "sprites/water.png",
-    "sprites/block.png"
+    "sprites/blockTerrain_1.png",
+    "sprites/grass_0.png",
+    "sprites/dirt_0.png",
+    "sprites/isometric-plant-pack/isometric tiles/weed06.png",
+    "sprites/isometric-plant-pack/isometric tiles/shrub1-05.png",
+    "sprites/isometric-plant-pack/isometric tiles/bamboo01.png"
   ],
   "playerImages": [
-    "sprites/image.png"
+    "sprites/monkeyPlayer.png"
   ]
 }

@@ -19,7 +19,7 @@ class View{
       var xrange = 10
       var yrange = 10
 
-      var ralphGraphic = null // Will contain the image of Raplh once it has been loaded
+      var playerImage = null // Will contain the image of Raplh once it has been loaded
 
       var context = CanvasControl.create("canvas", 640, 640, {}, "main")
       CanvasControl.fullScreen()
@@ -62,7 +62,7 @@ class View{
           for (var j = 0; j < 0 + yrange; j++) {
             tileLayer.draw(i, j)
             if (i === player.localX && j === player.localY) {
-              objectLayer.draw(i, j, ralphGraphic)
+              objectLayer.draw(i, j, playerImage)
             }
           }
         }
@@ -83,7 +83,7 @@ class View{
       imgLoad(images).then(function(imgResponse) {
 
         // set Raplphs image, imgResponse[1] because it was the second list of graphics to be loaded
-        ralphGraphic = imgResponse[1].files["image.png"]
+        playerImage = imgResponse[1].files["monkeyPlayer.png"]
 
 
         tileLayer.setup({
@@ -97,7 +97,7 @@ class View{
           heightMap: {
           map: jsonResponse[0].height,
           // imgResponse[0] contains the first set of grpahic files[] we placed in the graphics array
-          heightTile: imgResponse[0].files["block.png"],
+          heightTile: imgResponse[0].files["blockTerrain_1.png"],
           offset: 0
           },
           shadow: {
