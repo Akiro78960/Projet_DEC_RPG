@@ -8,10 +8,11 @@ class View{
       'jsiso/canvas/Control',
       'jsiso/tile/Field',
       'jsiso/img/load',
+      'jsiso/json/load',
       'jsiso/canvas/Input',
       'requirejs/domReady!'
     ],
-    function(CanvasControl, TileField, imgLoad, CanvasInput) {
+    function(CanvasControl, TileField, imgLoad, jsonLoader, CanvasInput) {
 
       // RGBA of color to use
       var tileColor = "(158, 154, 255, 1)";
@@ -89,6 +90,8 @@ class View{
         }
       }
 
+
+      jsonLoader(['JS/maps.json','JS/imageFiles.json']).then(function(jsonResponse){})
 
       var images = [
           {

@@ -1,6 +1,6 @@
 
 <!--
-/*  
+/*
 Copyright (c) 2013 Iain Hamilton & Edward Smyth
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19,7 +19,7 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. 
+THE SOFTWARE.
 
 - Author : Iain M Hamilton - <iain@beakable.com> - http://www.beakable.com
 
@@ -77,11 +77,11 @@ THE SOFTWARE.
 
       // -- FPS --------------------------------
       window.requestAnimFrame = (function() {
-        return window.requestAnimationFrame || 
-        window.webkitRequestAnimationFrame  || 
-        window.mozRequestAnimationFrame     || 
-        window.oRequestAnimationFrame       ||  
-        window.msRequestAnimationFrame      || 
+        return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame  ||
+        window.mozRequestAnimationFrame     ||
+        window.oRequestAnimationFrame       ||
+        window.msRequestAnimationFrame      ||
         function(callback, element) {
           window.setTimeout(callback, 1000 / 60);
         };
@@ -219,7 +219,7 @@ THE SOFTWARE.
           marginRight: "auto"
         });
         CanvasControl.fullScreen();
-        
+
         var input = new CanvasInput(document, CanvasControl());
         input.keyboard(function(pressed) {
           switch(pressed) {
@@ -285,13 +285,13 @@ THE SOFTWARE.
             break;
           }
         });
-        
+
         function draw() {
           context.clearRect(0, 0, CanvasControl().width, CanvasControl().height);
           calculatePaths ++;
            if(calculatePaths === 100) {
               enemy.map(function(e) {
-                pathfind(e.id, [e.xPos, e.yPos], [player.xPos, player.yPos], mapLayers[1].getLayout(), false).then(function (data) { 
+                pathfind(e.id, [e.xPos, e.yPos], [player.xPos, player.yPos], mapLayers[1].getLayout(), false).then(function (data) {
                   if (data.length > 0 && data[1] !== undefined) {
                     e.xPos = data[1].x;
                     e.yPos = data[1].y;
@@ -314,7 +314,7 @@ THE SOFTWARE.
                     if (i === e.xPos  && j === e.yPos  && layer.getTitle() === "Object Layer") {
                       layer.draw(i, j, e.image);
                     }
-                  });          
+                  });
                 });
              }
            }

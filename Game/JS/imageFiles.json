@@ -1,9 +1,9 @@
 {
-    "groundImages": [
-        "sprites/land.png",
-        "sprites/water.png",
-    ],
-    "playerImages": [
-        "sprites/image.png"
-    ]
+  "groundImages": [
+    "sprites/land.png",
+    "sprites/water.png"
+  ],
+  "playerImages": [
+    "sprites/image.png"
+  ]
 }
