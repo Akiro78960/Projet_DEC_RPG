@@ -13,35 +13,13 @@ class View{
       'requirejs/domReady!'
     ],
     function(CanvasControl, TileField, imgLoad, jsonLoader, CanvasInput) {
-
-      // RGBA of color to use
-      var tileColor = "(158, 154, 255, 1)";
-      var groundColor =  "(100, 154, 100, 1)";
-
-      // Our Tile Map
-      var tileMap = [
-        [groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor],
-        [groundColor, tileColor, groundColor, tileColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor],
-        [groundColor, tileColor, tileColor, tileColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor],
-        [groundColor, tileColor, groundColor, tileColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor],
-        [groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, tileColor, groundColor, groundColor, groundColor, groundColor, groundColor]
-      ]
-
-      // Our Height Map
-      var tileHeightMap = [
-        [0,1,2,2,1,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
-        [0,1,0,1,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0],
-        [0,1,1,1,0,2,0,0,0,0,0,1,2,2,1,1,0,0,0],
-        [0,4,0,4,0,3,0,0,0,0,0,1,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0]
-      ]
+        jsonLoader(['JS/maps.json','JS/imageFiles.json']).then(function(jsonResponse){
 
       // X & Y drawing position, and tile span to draw
-      var xrange = 15
-      var yrange = 15
+      var xrange = 10
+      var yrange = 10
 
       var ralphGraphic = null // Will contain the image of Raplh once it has been loaded
-      var image = null
 
       var context = CanvasControl.create("canvas", 640, 640, {}, "main")
       CanvasControl.fullScreen()
@@ -91,21 +69,14 @@ class View{
       }
 
 
-      jsonLoader(['JS/maps.json','JS/imageFiles.json']).then(function(jsonResponse){})
-
-      var images = [
-          {
-              graphics: [
-                  "/sprites/minecube.png" // The images we want to load using imgLoader
-              ]
-          },
-          {
-              graphics: [
-                  "/sprites/image.png"
-              ]
-          }
-      ]
-
+          var images = [
+              {
+                  graphics: jsonResponse[1].groundImages
+              },
+              {
+                  graphics: jsonResponse[1].playerImages
+              }
+          ]
 
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
@@ -113,19 +84,20 @@ class View{
 
         // set Raplphs image, imgResponse[1] because it was the second list of graphics to be loaded
         ralphGraphic = imgResponse[1].files["image.png"]
-        // image = imgResponse[1].files["image.png"]
 
 
         tileLayer.setup({
           title: "Ground Layer",
-          layout: tileMap,
+          layout: jsonResponse[0].ground,
+          graphics: imgResponse[0].files,
+          graphicsDictionary: imgResponse[0].dictionary,
           isometric: true, // Flag used to layout grid in isometric format
           tileHeight: 50,
           tileWidth: 100,
           heightMap: {
-          map: tileHeightMap,
+          map: jsonResponse[0].height,
           // imgResponse[0] contains the first set of grpahic files[] we placed in the graphics array
-          heightTile: imgResponse[0].files["minecube.png"],
+          heightTile: imgResponse[0].files["block.png"],
           offset: 0
           },
           shadow: {
@@ -139,11 +111,11 @@ class View{
           title: "Object Layer",
           isometric: true, // Flag used to layout grid in isometric format
           zeroIsBlank: true,
-          layout: tileMap,
+          layout: jsonResponse[0].objects,
           tileHeight: 50,
           tileWidth: 100,
           heightMap: {
-            map: tileHeightMap,
+            map: jsonResponse[0].height ,
             offset: 50,
             heightMapOnTop: true// We want to draw only on top of the heightmap
           }
@@ -156,11 +128,12 @@ class View{
         objectLayer.flip("vertical")
 
         // Set an offset so our map is on screen
-        tileLayer.setOffset(200, 200)
-        objectLayer.setOffset(200, 200)
+        tileLayer.setOffset(500, 100)
+        objectLayer.setOffset(500, 100)
 
         // Call draw Tile Map function
         drawTileMap()
+      })
       })
     })
     }

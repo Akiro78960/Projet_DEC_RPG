@@ -1,7 +1,8 @@
 {
   "groundImages": [
     "sprites/land.png",
-    "sprites/water.png"
+    "sprites/water.png",
+    "sprites/block.png"
   ],
   "playerImages": [
     "sprites/image.png"
