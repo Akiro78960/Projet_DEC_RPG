@@ -14,7 +14,7 @@ window.onload = function(){
 
 
 function tick(){
-    console.log("playerX = " + model.player.localX + ", playerY = "+model.player.localY);
+    //console.log("playerX = " + model.player.localX + ", playerY = "+model.player.localY);
     requestAnimationFrame(tick)
 }
 
