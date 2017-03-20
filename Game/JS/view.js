@@ -149,7 +149,7 @@ class View{
                           heightMap: {
                           map: jsonResponse[0].height.x0.y0,
                           // imgResponse[0] contains the first set of grpahic files[] we placed in the graphics array
-                          heightTile: imgResponse[0].files["blockTerrain_1.png"],
+                              heightTile: imgResponse[0].files["blockTerrain_1.png"],
                           offset: 0
                           },
                           shadow: {

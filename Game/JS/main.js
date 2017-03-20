@@ -4,6 +4,7 @@ var model = null
 importJS("view.js")
 importJS("model.js")
 importJS("player.js")
+importJS("fighter.js")
 
 window.onload = function(){
     view = new View()
