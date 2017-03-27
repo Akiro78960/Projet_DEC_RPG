@@ -8,7 +8,6 @@
     "sprites/isometric-plant-pack/isometric tiles/bamboo01.png"
   ],
   "playerImages": [
-    "sprites/monkeyPlayerCopie.png",
     "sprites/monkeyPlayer.png",
     "sprites/knight.png",
     "sprites/oldScroll.png"
