@@ -19,7 +19,6 @@ class View{
       var xrange = 10
       var yrange = 10
 
-      var playerImage = null // Will contain the image of Raplh once it has been loaded
 
       var context = CanvasControl.create("canvas", 640, 640, {}, "main")
       CanvasControl.fullScreen()
@@ -37,6 +36,17 @@ class View{
               graphics: jsonResponse[1].playerImages
           }
       ]
+
+      var backgroundScroll = new Image()
+      backgroundScroll.src="sprites/oldScroll.png"
+      var fighter1Image = new Image()
+      var fighter2Image = new Image()
+      var fighter3Image = new Image()
+      var fighter4Image = new Image()
+      fighter1Image.src="sprites/monkeyPlayer.png"
+      fighter2Image.src="sprites/knight.png"
+      fighter3Image.src="sprites/monkeyPlayer.png"
+      fighter4Image.src="sprites/monkeyPlayer.png"
 
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
@@ -66,6 +76,7 @@ class View{
               updateLayers()
               // Call draw Tile Map function
               drawTileMap()
+              drawPlayerInfo()
             }
           });
 
@@ -82,12 +93,47 @@ class View{
               for (var j = 0; j < 0 + yrange; j++) {
                 tileLayer.draw(i, j)
                 if (i === player.localX && j === player.localY) {
-                  objectLayer.draw(i, j, playerImage)
+                  objectLayer.draw(i, j, fighter1Image)
                 }
               }
             }
           }
 
+          function drawPlayerInfo(){
+              var ctx = document.getElementById("canvas").getContext('2d')
+
+              for (var i = 0; i < player.fighter.length; i++) {
+                  ctx.fillStyle="#321010"
+                  ctx.drawImage(backgroundScroll, 50+285*i,650, 180, 180)
+                  ctx.font="25px Courier New"
+                  ctx.fillText(player.fighter[i].name, 82+285*i, 712, 100)
+                  switch (i) {
+                        case 0:
+                            ctx.drawImage(fighter1Image,110+285*i, 712, 42, 40)
+                            break;
+                        case 1:
+                            ctx.drawImage(fighter2Image,110+285*i, 712, 42, 40)
+                            break;
+                        case 2:
+                            ctx.drawImage(fighter3Image,110+285*i, 712, 42, 40)
+                            break;
+                        case 3:
+                            ctx.drawImage(fighter4Image,110+285*i, 712, 42, 40)
+                            break;
+                  }
+
+                  ctx.strokeRect(90+285*i, 755, 100, 8)
+                  ctx.strokeRect(100+285*i, 785, 100, 8)
+                  ctx.font="13px Courier New"
+                  ctx.fillText("HP: "+player.fighter[i].HP+"/"+player.fighter[i].HPMax, 98+285*i, 774)
+                  ctx.fillText("MP: "+player.fighter[i].MP+"/"+player.fighter[i].MPMax, 108+285*i, 804)
+                  ctx.fillStyle="#FF0000"
+                  ctx.fillRect(91+285*i, 756, player.fighter[i].HP/player.fighter[i].HPMax*98, 6)
+                  ctx.fillStyle="#1111FF"
+                  ctx.fillRect(101+285*i, 786, player.fighter[i].MP/player.fighter[i].MPMax*98, 6)
+              }
+            //   ctx.fillRect(100,100,300,300)
+          }
 
 
               function updateLayers(){
@@ -134,9 +180,6 @@ class View{
 
 
 
-            // set Raplphs image, imgResponse[1] because it was the second list of graphics to be loaded
-            playerImage = imgResponse[1].files["monkeyPlayer.png"]
-
 
             tileLayer.setup({
                           title: "Ground Layer",
@@ -173,6 +216,7 @@ class View{
               }
             })
 
+
             // Rotate our entire Map
             tileLayer.rotate("left")
             objectLayer.rotate("left")
@@ -185,8 +229,11 @@ class View{
 
             // Call draw Tile Map function
             drawTileMap()
+            drawPlayerInfo()
       })
       })
     })
     }
+
+
 }

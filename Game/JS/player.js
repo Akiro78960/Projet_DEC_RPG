@@ -6,6 +6,12 @@ class Player{
         this.globalY=0
         this.strGlobalX="x"+this.globalX
         this.strGlobalY="y"+this.globalY
+        this.gold = 0
+        this.fighter = Array()
+        this.fighter[0] = new Fighter("monkeyPlayer")
+        this.fighter[1] = new Fighter("Knight")
+        this.fighter[2] = new Fighter("Fighter3")
+        this.fighter[3] = new Fighter("Fighter 4")
     }
     updatePosition(){
         if(this.localY>=10){
