@@ -1,5 +1,6 @@
 var view = null
 var model = null
+var tailleMap = 2
 
 importJS("view.js")
 importJS("model.js")

@@ -16,8 +16,8 @@ class View{
         jsonLoader(['JS/maps.json','JS/imageFiles.json']).then(function(jsonResponse){
 
       // X & Y drawing position, and tile span to draw
-      var xrange = 10
-      var yrange = 10
+      var xrange = 12
+      var yrange = 12
 
 
       var context = CanvasControl.create("canvas", 640, 640, {}, "main")
@@ -144,8 +144,8 @@ class View{
                                 graphics: imgResponse[0].files,
                                 graphicsDictionary: imgResponse[0].dictionary,
                                 isometric: true, // Flag used to layout grid in isometric format
-                                tileHeight: 50,
-                                tileWidth: 100,
+                                tileHeight: 30,
+                                tileWidth: 60,
                                 heightMap: {
                                 map: jsonResponse[0].height[player.strGlobalX][player.strGlobalY],
                                 // imgResponse[0] contains the first set of grpahic files[] we placed in the graphics array
@@ -153,7 +153,7 @@ class View{
                                 offset: 0
                                 },
                                 shadow: {
-                                  offset: 50, // Offset is the same height as the stack tile
+                                  offset: 30, // Offset is the same height as the stack tile
                                   verticalColor: '(5, 5, 30, 0.2)',
                                   horizontalColor: '(6, 5, 50, 0.3)'
                                 }
@@ -166,11 +166,11 @@ class View{
                     isometric: true, // Flag used to layout grid in isometric format
                     zeroIsBlank: true,
                     layout: jsonResponse[0].objects,
-                    tileHeight: 50,
-                    tileWidth: 100,
+                    tileHeight: 30,
+                    tileWidth: 60,
                     heightMap: {
                       map: jsonResponse[0].height[player.strGlobalX][player.strGlobalY],
-                      offset: 50,
+                      offset: 30,
                       heightMapOnTop: true// We want to draw only on top of the heightmap
                     }
                   })
@@ -187,8 +187,8 @@ class View{
                           graphics: imgResponse[0].files,
                           graphicsDictionary: imgResponse[0].dictionary,
                           isometric: true, // Flag used to layout grid in isometric format
-                          tileHeight: 50,
-                          tileWidth: 100,
+                          tileHeight: 30,
+                          tileWidth: 60,
                           heightMap: {
                           map: jsonResponse[0].height.x0.y0,
                           // imgResponse[0] contains the first set of grpahic files[] we placed in the graphics array
@@ -196,7 +196,7 @@ class View{
                           offset: 0
                           },
                           shadow: {
-                            offset: 50, // Offset is the same height as the stack tile
+                            offset: 30, // Offset is the same height as the stack tile
                             verticalColor: '(5, 5, 30, 0.2)',
                             horizontalColor: '(6, 5, 50, 0.3)'
                           }
@@ -207,11 +207,11 @@ class View{
               isometric: true, // Flag used to layout grid in isometric format
               zeroIsBlank: true,
               layout: jsonResponse[0].objects,
-              tileHeight: 50,
-              tileWidth: 100,
+              tileHeight: 30,
+              tileWidth: 60,
               heightMap: {
                 map: jsonResponse[0].height.x0.y0,
-                offset: 50,
+                offset: 30,
                 heightMapOnTop: true// We want to draw only on top of the heightmap
               }
             })
