@@ -18,6 +18,7 @@ class View{
       // X & Y drawing position, and tile span to draw
       var xrange = 12
       var yrange = 12
+      var globalSize = 2
 
 
       var context = CanvasControl.create("canvas", 640, 640, {}, "main")
@@ -60,16 +61,24 @@ class View{
               switch(pressed) {
                 // Move player
                 case 37:
-                  player.localX --
-                break;
+                    if(player.localX != 0 || player.globalX >0){
+                        player.localX --
+                    }
+                    break;
                 case 39:
-                  player.localX ++
-                break
+                    if(player.localX != (xrange-1) || player.globalX < (globalSize-1)){
+                        player.localX ++
+                    }
+                    break
                 case 40:
-                  player.localY ++
-                break
+                    if(player.localY != (yrange-1) || player.globalY < (globalSize-1)){
+                        player.localY ++
+                    }
+                    break
                 case 38:
-                  player.localY --
+                if(player.localY != 0 || player.globalY >0){
+                    player.localY --
+                }
                 break
               }
               player.updatePosition()
