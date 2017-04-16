@@ -1,21 +1,22 @@
 var view = null
 var model = null
+var tailleMap = 2
 
 importJS("view.js")
 importJS("model.js")
 importJS("player.js")
 importJS("fighter.js")
+importJS("job.js")
 
 window.onload = function(){
-    view = new View()
-    model = new Model(new Player())
+    initGame()
     view.draw(model.player)
     tick()
 }
 
 
 function tick(){
-    //console.log("playerX = " + model.player.localX + ", playerY = "+model.player.localY);
+    // view.drawPlayerInfo()
     requestAnimationFrame(tick)
 }
 
@@ -25,4 +26,11 @@ function importJS(str){
     var node = document.createElement("script")
     node.src="JS/"+str
     head.insertBefore(node, head.firstChild)
+}
+
+function initGame(){
+    console.log("init")
+    view = new View()
+    model = new Model(new Player())
+    console.log("init done");
 }
