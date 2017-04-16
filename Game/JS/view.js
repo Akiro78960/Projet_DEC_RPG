@@ -147,7 +147,7 @@ class View{
                           tileHeight: 50,
                           tileWidth: 100,
                           heightMap: {
-                          map: jsonResponse[0].height.x0.y0,
+                          map: jsonResponse[0].height.[player.strGlobalX][player.strGlobalY],
                           // imgResponse[0] contains the first set of grpahic files[] we placed in the graphics array
                               heightTile: imgResponse[0].files["blockTerrain_1.png"],
                           offset: 0
@@ -167,7 +167,7 @@ class View{
               tileHeight: 50,
               tileWidth: 100,
               heightMap: {
-                map: jsonResponse[0].height.x0.y0,
+                map: jsonResponse[0].height.[player.strGlobalX][player.strGlobalY],
                 offset: 50,
                 heightMapOnTop: true// We want to draw only on top of the heightmap
               }
