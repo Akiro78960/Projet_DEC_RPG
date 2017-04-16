@@ -10,6 +10,8 @@
   "playerImages": [
     "sprites/monkeyPlayer.png",
     "sprites/knight.png",
+    "sprites/feca.png",
+    "sprites/iop.png",
     "sprites/oldScroll.png"
   ]
 }

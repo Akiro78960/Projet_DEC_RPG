@@ -45,8 +45,8 @@ class View{
       var fighter4Image = new Image()
       fighter1Image.src="sprites/monkeyPlayer.png"
       fighter2Image.src="sprites/knight.png"
-      fighter3Image.src="sprites/monkeyPlayer.png"
-      fighter4Image.src="sprites/monkeyPlayer.png"
+      fighter3Image.src="sprites/feca.png"
+      fighter4Image.src="sprites/iop.png"
 
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
@@ -190,7 +190,7 @@ class View{
                           tileHeight: 30,
                           tileWidth: 60,
                           heightMap: {
-                          map: jsonResponse[0].height.[player.strGlobalX][player.strGlobalY],
+                          map: jsonResponse[0].height[player.strGlobalX][player.strGlobalY],
                           // imgResponse[0] contains the first set of grpahic files[] we placed in the graphics array
                               heightTile: imgResponse[0].files["blockTerrain_1.png"],
                           offset: 0
@@ -210,7 +210,7 @@ class View{
               tileHeight: 30,
               tileWidth: 60,
               heightMap: {
-                map: jsonResponse[0].height.[player.strGlobalX][player.strGlobalY],
+                map: jsonResponse[0].height[player.strGlobalX][player.strGlobalY],
                 offset: 50,
                 heightMapOnTop: true// We want to draw only on top of the heightmap
               }

@@ -6,11 +6,11 @@ class Fighter{
         this.HP = this.HPMax
         this.MPMax = 20
         this.MP = this.MPMax
-        this.atk = 5
-        this.def = 5
-        this.atkM = 5
-        this.defM = 5
-        this.speed = 5
+        this.atk = 10
+        this.def = 10
+        this.atkM = 10
+        this.defM = 10
+        this.speed = 10
         this.crit = 5
         this.vulneFire = 0
         this.vulneIce = 0
