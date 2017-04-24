@@ -14,6 +14,12 @@ class Player{
         this.fighter[1] = new Fighter("Knight")
         this.fighter[2] = new Fighter("Fighter3")
         this.fighter[3] = new Fighter("Fighter4")
+        this.listJob = Array()
+        this.listJob["fighter"] = new Job(["sword"], 4, 1.2, 1.2, 1,1,1)
+        this.listJob["blackMage"] = new Job(["scepter"], 3, 1, 1, 1, 1.2, 1.2)
+        this.listJob["whiteMage"] = new Job(["rod"], 3, 1, 1, 1, 1.2, 1.2)
+        this.listJob["rogue"] = new Job(["daggers"], 4, 1.2, 1, 1.2, 1, 1)
+        this.listJob["archer"] = new Job(["bow"], 3, 1.2, 1, 1.2, 1, 1)
     }
     updatePosition(){
         if(this.localY>=this.localSizeMax){

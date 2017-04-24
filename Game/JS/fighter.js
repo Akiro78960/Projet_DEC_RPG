@@ -1,7 +1,9 @@
 class Fighter{
-    constructor(name){
-        // this.job = job
+    constructor(name, job){
+        this.job = job
         this.name = name
+        this.experience = 0
+        this.level = 1
         this.HPMax = 30
         this.HP = this.HPMax
         this.MPMax = 20
