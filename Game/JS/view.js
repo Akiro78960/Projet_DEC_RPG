@@ -49,6 +49,11 @@ class View{
       fighter3Image.src="sprites/feca.png"
       fighter4Image.src="sprites/iop.png"
 
+      var ctx = document.getElementById("canvas").getContext('2d')
+      var menu = false
+      var menuItems = ["Inventaire", "Fighters"]
+      var selectedItem = 0
+      var maxSelectedItem = menuItems.length
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
       imgLoad(images).then(function(imgResponse) {
@@ -61,37 +66,72 @@ class View{
               switch(pressed) {
                 // Move player
                 case 37:
-                    if(player.localX != 0 || player.globalX >0){
-                        player.localX --
+                    if(!menu){
+                        if(player.localX != 0 || player.globalX >0){
+                            player.localX --
+                        }
+                    }
+                    if(selectedItem > 0){
+                        selectedItem--
                     }
                     break;
                 case 39:
-                    if(player.localX != (xrange-1) || player.globalX < (globalSize-1)){
-                        player.localX ++
+                    if(!menu){
+                        if(player.localX != (xrange-1) || player.globalX < (globalSize-1)){
+                            player.localX ++
+                        }
+                    }
+                    if(selectedItem < maxSelectedItem-1){
+                        selectedItem++
                     }
                     break
                 case 40:
-                    if(player.localY != (yrange-1) || player.globalY < (globalSize-1)){
-                        player.localY ++
+                    if(!menu){
+                        if(player.localY != (yrange-1) || player.globalY < (globalSize-1)){
+                            player.localY ++
+                        }
                     }
                     break
                 case 38:
-                if(player.localY != 0 || player.globalY >0){
-                    player.localY --
+                    if(!menu){
+                        if(player.localY != 0 || player.globalY >0){
+                            player.localY --
+                        }
+                    }
+                    break
+                case 27:
+                if(!menu){
+                    menu = true
+                }else{
+                    menu = false
                 }
-                break
               }
               player.updatePosition()
               updateLayers()
-              // Call draw Tile Map function
               drawTileMap()
               drawPlayerInfo()
+              drawMenu()
             }
           });
 
 
           var jsontilelayer = null
 
+          function drawMenu(){
+              if(menu){
+                  ctx.strokeStyle = "white"
+                  ctx.globalAlpha = 0.8
+                  ctx.strokeRect(100, 50, 800, 80)
+                  ctx.fillRect(101, 51, 798, 78)
+                  ctx.fillStyle = "white"
+                  ctx.font="25px Courier New"
+                  $(menuItems).each(function(index, el) {
+                      ctx.fillText(el, 160+(index*230), 95, 100, 50)
+                  });
+                  ctx.fillRect(160+(selectedItem*230), 105, 80, 4)
+              }
+              ctx.globalAlpha = 1
+          }
 
 
           function drawTileMap() {
@@ -109,7 +149,6 @@ class View{
           }
 
           function drawPlayerInfo(){
-              var ctx = document.getElementById("canvas").getContext('2d')
 
               for (var i = 0; i < player.fighter.length; i++) {
                   ctx.fillStyle="#321010"

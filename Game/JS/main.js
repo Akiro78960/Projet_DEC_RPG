@@ -7,6 +7,7 @@ importJS("model.js")
 importJS("player.js")
 importJS("fighter.js")
 importJS("job.js")
+importJS("lib/jquery-3.2.1.min.js")
 
 window.onload = function(){
     initGame()
