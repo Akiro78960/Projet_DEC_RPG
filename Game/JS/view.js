@@ -151,6 +151,7 @@ class View{
           function drawPlayerInfo(){
 
               for (var i = 0; i < player.fighter.length; i++) {
+                  ctx.strokeStyle = "#321010"
                   ctx.fillStyle="#321010"
                   ctx.drawImage(backgroundScroll, 50+285*i,650, 180, 180)
                   ctx.font="25px Courier New"

@@ -17,5 +17,8 @@ class Fighter{
         this.vulneFire = 0
         this.vulneIce = 0
         this.vulneThunder = 0
+        this.weapon = null
+        this.headgear = null
+        this.bodygear = null
     }
 }

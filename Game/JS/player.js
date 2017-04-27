@@ -20,6 +20,10 @@ class Player{
         this.listJob["whiteMage"] = new Job(["rod"], 3, 1, 1, 1, 1.2, 1.2)
         this.listJob["rogue"] = new Job(["daggers"], 4, 1.2, 1, 1.2, 1, 1)
         this.listJob["archer"] = new Job(["bow"], 3, 1.2, 1, 1.2, 1, 1)
+        console.log("job created");
+        this.inventaire = Array()
+        this.inventaire.push(new Equipment("beginner sword", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
+        console.log("inventaire filled");
     }
     updatePosition(){
         if(this.localY>=this.localSizeMax){
