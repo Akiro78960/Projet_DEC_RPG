@@ -20,10 +20,13 @@ class Player{
         this.listJob["whiteMage"] = new Job(["rod"], 3, 1, 1, 1, 1.2, 1.2)
         this.listJob["rogue"] = new Job(["daggers"], 4, 1.2, 1, 1.2, 1, 1)
         this.listJob["archer"] = new Job(["bow"], 3, 1.2, 1, 1.2, 1, 1)
-        console.log("job created");
         this.inventaire = Array()
-        this.inventaire.push(new Equipment("beginner sword", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
-        console.log("inventaire filled");
+        this.inventaire.push(new Equipment("beginner sword1", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner sword2", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner sword3", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner sword4", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner sword5", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner sword6", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
     }
     updatePosition(){
         if(this.localY>=this.localSizeMax){

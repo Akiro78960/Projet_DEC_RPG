@@ -50,10 +50,17 @@ class View{
       fighter4Image.src="sprites/iop.png"
 
       var ctx = document.getElementById("canvas").getContext('2d')
-      var menu = false
-      var menuItems = ["Inventaire", "Fighters"]
-      var selectedItem = 0
-      var maxSelectedItem = menuItems.length
+
+      //menu and shit
+      var selector = 0
+      var menu = new MenuItem("Menu")
+      var inventaireItem = Array()
+      menu.addSubMenu([new MenuItem("Inventaire"), new MenuItem("Fighters")])
+      var selectorMax = menu.submenuItems.length
+      $(player.inventaire).each(function(index, el) {
+          inventaireItem.push(new MenuItem(el.name))
+      })
+      menu.submenuItems[0].addSubMenu(inventaireItem)
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
       imgLoad(images).then(function(imgResponse) {
@@ -66,44 +73,80 @@ class View{
               switch(pressed) {
                 // Move player
                 case 37:
-                    if(!menu){
+                    if(!menu.selected){
                         if(player.localX != 0 || player.globalX >0){
                             player.localX --
                         }
                     }
-                    if(selectedItem > 0){
-                        selectedItem--
+                    if(selector > 0){
+                        selector--
                     }
                     break;
                 case 39:
-                    if(!menu){
+                    if(!menu.selected){
                         if(player.localX != (xrange-1) || player.globalX < (globalSize-1)){
                             player.localX ++
                         }
                     }
-                    if(selectedItem < maxSelectedItem-1){
-                        selectedItem++
+                    if(selector < selectorMax-1){
+                        selector++
                     }
                     break
                 case 40:
-                    if(!menu){
+                    if(!menu.selected){
                         if(player.localY != (yrange-1) || player.globalY < (globalSize-1)){
                             player.localY ++
                         }
+                    }else if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-2){
+                        selector+=2
+                        console.log("down");
                     }
                     break
                 case 38:
-                    if(!menu){
+                    if(!menu.selected){
                         if(player.localY != 0 || player.globalY >0){
                             player.localY --
                         }
+                    }else if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector>1){
+                        selector-=2
                     }
                     break
-                case 27:
-                if(!menu){
-                    menu = true
-                }else{
-                    menu = false
+                case 27://escape
+                    if(!menu.selected){
+                        menu.selected = true
+                    }else{
+                        selector = 0
+                        //menu
+                        if(menu.selected && !menu.isSomethingSelected()){
+                            menu.selected = false
+                        }
+                        //inventaire
+                        if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected()){
+                            menu.submenuItems[0].selected = false
+                            selectorMax = menu.submenuItems.length
+                        }
+                        // var isSomethingSelected = false
+                        // $(menu.submenuItems).each(function(index, el) {
+                        //     if(el.selected){
+                        //         isSomethingSelected = true
+                        //         el.selected = false
+                        //     }
+                        // });
+                        // if (!isSomethingSelected) {
+                        //     menu.selected = false
+                        // }
+                    }
+                    break
+                case 13://enter
+                    //if menu principal
+                    if(menu.selected && !menu.isSomethingSelected()){
+                        menu.submenuItems[selector].selected = true
+                        selector = 0
+                        selectorMax = menu.submenuItems.length
+                    //if inventaire
+                }if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected()){
+                    selectorMax = menu.submenuItems[0].submenuItems.length
+                    // menu.submenuItems[0].submenuItems[selector].selected = true
                 }
               }
               player.updatePosition()
@@ -111,6 +154,7 @@ class View{
               drawTileMap()
               drawPlayerInfo()
               drawMenu()
+              console.log(selectorMax);
             }
           });
 
@@ -118,17 +162,38 @@ class View{
           var jsontilelayer = null
 
           function drawMenu(){
-              if(menu){
+              if(menu.selected){
+                  ////////backkground/////////
                   ctx.strokeStyle = "white"
                   ctx.globalAlpha = 0.8
                   ctx.strokeRect(100, 50, 800, 80)
                   ctx.fillRect(101, 51, 798, 78)
+
+                      /////////Inventaire////////
+                      if(menu.submenuItems[0].selected){
+                          ctx.strokeRect(100, 150, 800, 400)
+                          ctx.fillRect(101, 151, 798, 398)
+                      }
+
+                  ////////foreground////////
                   ctx.fillStyle = "white"
                   ctx.font="25px Courier New"
-                  $(menuItems).each(function(index, el) {
-                      ctx.fillText(el, 160+(index*230), 95, 100, 50)
-                  });
-                  ctx.fillRect(160+(selectedItem*230), 105, 80, 4)
+                  $(menu.submenuItems).each(function(index, el) {
+                      ctx.fillText(el.name, 160+(index*240), 95, 100, 50)
+                  })
+                  if(!menu.isSomethingSelected()){
+                      ctx.fillRect(160+(selector*240), 105, 80, 4)
+                  }
+                  /////////Inventaire////////
+                  if(menu.submenuItems[0].selected){
+                      ctx.font="20px Courier New"
+                      $(menu.submenuItems[0].submenuItems).each(function(index, el) {
+                          ctx.fillText(el.name, 200+(index%2)*400, 200+(Math.floor(index/2))*50, 120, 50)
+                          if(selector == index){
+                              ctx.fillRect(200+(index%2)*400, 201+(Math.floor(index/2))*50, 120, 4)
+                          }
+                      });
+                  }
               }
               ctx.globalAlpha = 1
           }
