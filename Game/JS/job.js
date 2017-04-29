@@ -1,5 +1,6 @@
 class Job {
-    constructor(weaponAllowed, mobility, atkMultiplier, defMultiplier, speedMultiplier, atkMMultiplier, defMMultiplier ) {
+    constructor(name, weaponAllowed, mobility, atkMultiplier, defMultiplier, speedMultiplier, atkMMultiplier, defMMultiplier ) {
+        this.name = name
         this.weaponAllowed = weaponAllowed
         this.mobility = mobility
         this.atkMultiplier = atkMultiplier

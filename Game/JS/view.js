@@ -40,14 +40,14 @@ class View{
 
       var backgroundScroll = new Image()
       backgroundScroll.src="sprites/oldScroll.png"
-      var fighter1Image = new Image()
-      var fighter2Image = new Image()
-      var fighter3Image = new Image()
-      var fighter4Image = new Image()
-      fighter1Image.src="sprites/monkeyPlayer.png"
-      fighter2Image.src="sprites/knight.png"
-      fighter3Image.src="sprites/feca.png"
-      fighter4Image.src="sprites/iop.png"
+      var fighterImage = Array()
+      for (var i = 0; i < 4; i++) {
+          fighterImage[i] = new Image()
+      }
+      fighterImage[0].src="sprites/monkeyPlayer.png"
+      fighterImage[1].src="sprites/knight.png"
+      fighterImage[2].src="sprites/feca.png"
+      fighterImage[3].src="sprites/iop.png"
 
       var ctx = document.getElementById("canvas").getContext('2d')
 
@@ -72,43 +72,54 @@ class View{
             if (!keydown) {
               switch(pressed) {
                 // Move player
-                case 37:
+                case 37://left
                     if(!menu.selected){
                         if(player.localX != 0 || player.globalX >0){
                             player.localX --
                         }
                     }
-                    if(selector > 0){
+                    if(menu.selected && !menu.isSomethingSelected() && selector > 0){
+                        selector--
+                    }
+                    if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector>1){
                         selector--
                     }
                     break;
-                case 39:
+                case 39://right
                     if(!menu.selected){
                         if(player.localX != (xrange-1) || player.globalX < (globalSize-1)){
                             player.localX ++
                         }
                     }
-                    if(selector < selectorMax-1){
+                    if(menu.selected && !menu.isSomethingSelected() && selector < selectorMax-1){
+                        selector++
+                    }
+                    if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-1){
                         selector++
                     }
                     break
-                case 40:
+                case 40://down
                     if(!menu.selected){
                         if(player.localY != (yrange-1) || player.globalY < (globalSize-1)){
                             player.localY ++
                         }
                     }else if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-2){
                         selector+=2
-                        console.log("down");
+                    }
+                    if(menu.submenuItems[1].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-1){
+                        selector++
                     }
                     break
-                case 38:
+                case 38://up
                     if(!menu.selected){
                         if(player.localY != 0 || player.globalY >0){
                             player.localY --
                         }
                     }else if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector>1){
                         selector-=2
+                    }
+                    if(menu.submenuItems[1].selected && !menu.submenuItems[1].isSomethingSelected() && selector>0){
+                        selector--
                     }
                     break
                 case 27://escape
@@ -123,6 +134,10 @@ class View{
                         //inventaire
                         if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected()){
                             menu.submenuItems[0].selected = false
+                            selectorMax = menu.submenuItems.length
+                        }
+                        if(menu.submenuItems[1].selected && !menu.submenuItems[1].isSomethingSelected()){
+                            menu.submenuItems[1].selected = false
                             selectorMax = menu.submenuItems.length
                         }
                         // var isSomethingSelected = false
@@ -143,18 +158,21 @@ class View{
                         menu.submenuItems[selector].selected = true
                         selector = 0
                         selectorMax = menu.submenuItems.length
-                    //if inventaire
-                }if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected()){
-                    selectorMax = menu.submenuItems[0].submenuItems.length
-                    // menu.submenuItems[0].submenuItems[selector].selected = true
+                        //if inventaire
+                    }if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected()){
+                        selectorMax = menu.submenuItems[0].submenuItems.length
+                        // menu.submenuItems[0].submenuItems[selector].selected = true
+                    }
+                    if(menu.submenuItems[1].selected && !menu.submenuItems[1].isSomethingSelected()){
+                        selectorMax = 4
+                    }
                 }
-              }
               player.updatePosition()
               updateLayers()
               drawTileMap()
               drawPlayerInfo()
               drawMenu()
-              console.log(selectorMax);
+              console.log("selector: " + selector + "   SelectorMax: "+selectorMax);
             }
           });
 
@@ -168,13 +186,11 @@ class View{
                   ctx.globalAlpha = 0.8
                   ctx.strokeRect(100, 50, 800, 80)
                   ctx.fillRect(101, 51, 798, 78)
-
-                      /////////Inventaire////////
-                      if(menu.submenuItems[0].selected){
-                          ctx.strokeRect(100, 150, 800, 400)
-                          ctx.fillRect(101, 151, 798, 398)
-                      }
-
+                  if(menu.isSomethingSelected()){
+                      ctx.fillStyle="#1111FF"
+                      ctx.strokeRect(100, 150, 800, 400)
+                      ctx.fillRect(101, 151, 798, 398)
+                  }
                   ////////foreground////////
                   ctx.fillStyle = "white"
                   ctx.font="25px Courier New"
@@ -194,6 +210,47 @@ class View{
                           }
                       });
                   }
+                  ////////Fighters////////
+                  else if(menu.submenuItems[1].selected){
+                    ctx.font="20px Courier New"
+                    ctx.drawImage(fighterImage[0], 130, 150, 110, 80)
+                    ctx.drawImage(fighterImage[1], 130, 250, 110, 80)
+                    ctx.drawImage(fighterImage[2], 130, 350, 110, 80)
+                    ctx.drawImage(fighterImage[3], 130, 450, 110, 80)
+                    ctx.strokeRect(135, 140+selector*100, 100, 100)
+                    ctx.fillText("Nom : " + player.fighter[selector].name, 400, 190, 200, 200)
+                    ctx.fillText("Classe : " + player.fighter[selector].job.name, 400, 220, 200, 200)
+                    ctx.fillText("Niveau : "+player.fighter[selector].level, 400, 250, 200, 200)
+                    ctx.font="16px Courier New"
+                    ctx.fillText("HP max : "+player.fighter[selector].HPMax, 300, 300, 200, 200)
+                    ctx.fillText("MP max : "+player.fighter[selector].MPMax, 300, 330, 200, 200)
+                    ctx.fillText("Attack : "+player.fighter[selector].getTotalAtk(), 300, 360, 200, 200)
+                    ctx.fillText("Defense : "+player.fighter[selector].getTotalDef(), 300, 390, 200, 200)
+                    ctx.fillText("Magie : "+player.fighter[selector].getTotalAtkM(), 300, 420, 200, 200)
+                    ctx.fillText("Defense magique: "+player.fighter[selector].getTotalDefM(), 300, 450, 200, 200)
+                    ctx.fillText("Vitesse : "+player.fighter[selector].getTotalSpeed(), 300, 480, 200, 200)
+                    ctx.fillText("Critique : "+player.fighter[selector].crit+"%", 300, 510, 200, 200)
+                    if (player.fighter[selector].weapon) {
+                        ctx.fillText("Arme : "+player.fighter[selector].weapon.name, 600, 300, 200, 200)
+                    }else {
+                        ctx.fillText("Arme : None", 600, 300, 200, 200)
+                    }
+                    if (player.fighter[selector].headgear) {
+                        ctx.fillText("Tete : "+player.fighter[selector].headgear.name, 600, 350, 200, 200)
+                    }else {
+                        ctx.fillText("Tete : None", 600, 350, 200, 200)
+                    }
+                    if (player.fighter[selector].bodygear) {
+                        ctx.fillText("Corps : "+player.fighter[selector].bodygear.name, 600, 400, 200, 200)
+                    }else {
+                        ctx.fillText("Corps : None", 600, 400, 200, 200)
+                    }
+                    if (player.fighter[selector].accessory) {
+                        ctx.fillText("Accessoire : "+player.fighter[selector].accessory.name, 600, 450, 200, 200)
+                    }else {
+                        ctx.fillText("Accessoire : None", 600, 450, 200, 200)
+                    }
+                  }
               }
               ctx.globalAlpha = 1
           }
@@ -207,7 +264,7 @@ class View{
               for (var j = 0; j < 0 + yrange; j++) {
                 tileLayer.draw(i, j)
                 if (i === player.localX && j === player.localY) {
-                  objectLayer.draw(i, j, fighter1Image)
+                  objectLayer.draw(i, j, fighterImage[1])
                 }
               }
             }
@@ -223,16 +280,16 @@ class View{
                   ctx.fillText(player.fighter[i].name, 82+285*i, 712, 100)
                   switch (i) {
                         case 0:
-                            ctx.drawImage(fighter1Image,110+285*i, 712, 42, 40)
+                            ctx.drawImage(fighterImage[0],110+285*i, 712, 42, 40)
                             break;
                         case 1:
-                            ctx.drawImage(fighter2Image,110+285*i, 712, 42, 40)
+                            ctx.drawImage(fighterImage[1],110+285*i, 712, 42, 40)
                             break;
                         case 2:
-                            ctx.drawImage(fighter3Image,110+285*i, 712, 42, 40)
+                            ctx.drawImage(fighterImage[2],110+285*i, 712, 42, 40)
                             break;
                         case 3:
-                            ctx.drawImage(fighter4Image,110+285*i, 712, 42, 40)
+                            ctx.drawImage(fighterImage[3],110+285*i, 712, 42, 40)
                             break;
                   }
 
