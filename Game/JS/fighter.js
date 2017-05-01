@@ -94,17 +94,17 @@ class Fighter{
         var tmp = 0
         tmp += this.speed
         if(this.weapon){
-            tmp += weapon.speed
+            tmp += weapon.def
         }
         if (this.headgear) {
-            tmp += headgear.speed
+            tmp += headgear.def
         }
         if (this.bodygear) {
-            tmp += bodygear.speed
+            tmp += bodygear.def
         }
         if(this.accessory){
-            tmp += accessory.speed
+            tmp += accessory.def
         }
-        return tmp*this.job.speedMultiplier
+        return tmp*this.job.defMultiplier
     }
 }
