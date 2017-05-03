@@ -210,7 +210,7 @@ class View{
                     // for (var i = 0; i < menu.submenuItems[1].submenuItems.length; i++) {
                         if(menu.submenuItems[1].submenuItems[selectorFighter].selected && !menu.submenuItems[1].submenuItems[selectorFighter].isSomethingSelected()){
                             menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].selected = true
-                            selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].submenuItems.length
+                            selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].submenuItems.length
                             selector = 0
                             console.log("propertiesSelect: "+menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].submenuItems.length);
                         }

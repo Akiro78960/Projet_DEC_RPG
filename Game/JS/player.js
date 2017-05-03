@@ -23,11 +23,22 @@ class Player{
         this.fighter[3] = new Fighter("Fighter4", this.listJob[0])
         this.inventaire = Array()
         this.inventaire.push(new Equipment("beginner sword1", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
-        this.inventaire.push(new Equipment("beginner sword2", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
-        this.inventaire.push(new Equipment("beginner sword3", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
-        this.inventaire.push(new Equipment("beginner sword4", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
-        this.inventaire.push(new Equipment("beginner sword5", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
-        this.inventaire.push(new Equipment("beginner sword6", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner bow","bow", null, 5, 0, 0, 3, 0, 0, 0, 0, 6, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner rod", "rod", null, 1, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner scepter", "scepter", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner helmet", "headgear", null, 0, 5, 0, 0, 3, 0, 2, 0, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner helmet", "headgear", null, 0, 5, 0, 0, 3, 0, 2, 0, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner helmet", "headgear", null, 0, 5, 0, 0, 3, 0, 2, 0, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner helmet", "headgear", null, 0, 5, 0, 0, 3, 0, 2, 0, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner armor", "bodygear", null, 0, 5, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner armor", "bodygear", null, 0, 5, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner armor", "bodygear", null, 0, 5, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner armor", "bodygear", null, 0, 5, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
+    
     }
     updatePosition(){
         if(this.localY>=this.localSizeMax){
