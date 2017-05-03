@@ -58,6 +58,7 @@ class View{
           menu.addSubMenu([new MenuItem("Inventaire"), new MenuItem("Fighters")])
           var selectorMax = menu.submenuItems.length
           var selectorFighter = 0//sert a garder l'image du joueur affiche
+          var selectorPropertie = 0
           //inventaire//
           $(player.inventaire).each(function(index, el) {
               array.push(new MenuItem(el.name))
@@ -208,14 +209,28 @@ class View{
                     }
                     //if one-of-fighters-properties
                     // for (var i = 0; i < menu.submenuItems[1].submenuItems.length; i++) {
-                        if(menu.submenuItems[1].submenuItems[selectorFighter].selected && !menu.submenuItems[1].submenuItems[selectorFighter].isSomethingSelected()){
-                            menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].selected = true
-                            selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].submenuItems.length
-                            selector = 0
-                            console.log("propertiesSelect: "+menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].submenuItems.length);
-                        }
+                    if(menu.submenuItems[1].submenuItems[selectorFighter].selected && !menu.submenuItems[1].submenuItems[selectorFighter].isSomethingSelected()){
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].selected = true
+                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].submenuItems.length
+                        selectorPropertie = selector
+                        selector = 0
+                    }
                     // }
-                    if(menu)
+                    // console.log("SP: "+menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected);
+                    else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected && !menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].isSomethingSelected()){
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = true
+                        console.log("job changed");
+                    }
+
+                    ///la var adns le if pas encore selected
+                    if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].isSomethingSelected()){
+                        console.log("job changed");
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].submenuItems[selector].selected = false
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].selected = false
+                        player.fighter[selectorFighter].job = player.listJob[selector]
+                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                        selector = 0
+                    }
 
                     break
 
@@ -308,12 +323,23 @@ class View{
                     }
 
                     //////////Modif Fighters/////////
-                    if(menu.submenuItems[1].isSomethingSelected()){
+                    if(menu.submenuItems[1].isSomethingSelected() && !menu.submenuItems[1].submenuItems[selectorFighter].isSomethingSelected()){
                         if(selector == 0){
                             ctx.strokeRect(390, 200, 220, 30)
                         }else{
                             ctx.strokeRect(590, 280+50*(selector-1), 220, 30)
                         }
+                    }
+                    ////////////AFFICHAGE jobs//////////////
+                    if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].selected){
+                        ctx.fillStyle="#1111FF"
+                        ctx.strokeRect(619, 199, 202, 252)
+                        ctx.fillRect(620, 200, 200, 250)
+                        ctx.fillStyle="#FFFFFF"
+                        for (var i = 0; i < player.listJob.length; i++) {
+                            ctx.fillText(player.listJob[i].name, 630, 225+i*35, 180, 180)
+                        }
+                        ctx.strokeRect(625, 205+35*selector, 180, 30)
                     }
                   }
               }

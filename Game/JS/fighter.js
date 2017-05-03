@@ -88,7 +88,7 @@ class Fighter{
         if(this.accessory){
             tmp += accessory.defM
         }
-        return tmp*this.job.defMultiplier
+        return tmp*this.job.defMMultiplier
     }
     getTotalSpeed(){
         var tmp = 0
@@ -105,6 +105,6 @@ class Fighter{
         if(this.accessory){
             tmp += accessory.def
         }
-        return tmp*this.job.defMultiplier
+        return tmp*this.job.speedMultiplier
     }
 }

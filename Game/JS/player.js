@@ -15,7 +15,7 @@ class Player{
         this.listJob[2] = new Job("white mage", ["rod"], 3, 1, 1, 1, 1.2, 1.2)
         this.listJob[3] = new Job("rogue", ["daggers"], 4, 1.2, 1, 1.2, 1, 1)
         this.listJob[4] = new Job("archer", ["bow"], 3, 1.2, 1, 1.2, 1, 1)
-        this.listJob[5] = new Job("warior", ["shield"], 4, 1, 1.2, 1, 1, 1.2)
+        this.listJob[5] = new Job("warrior", ["shield"], 4, 1, 1.2, 1, 1, 1.2)
         this.fighter = Array()
         this.fighter[0] = new Fighter("monkeyPlayer", this.listJob[2])
         this.fighter[1] = new Fighter("Knight", this.listJob[5])
@@ -38,7 +38,7 @@ class Player{
         this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
         this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
         this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
-    
+
     }
     updatePosition(){
         if(this.localY>=this.localSizeMax){
