@@ -34,10 +34,10 @@ class Player{
         this.inventaire.push(new Equipment("beginner armor", "bodygear", null, 0, 5, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0))
         this.inventaire.push(new Equipment("beginner armor", "bodygear", null, 0, 5, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0))
         this.inventaire.push(new Equipment("beginner armor", "bodygear", null, 0, 5, 0, 0, 2, 0, 3, 0, 0, 0, 0, 0))
-        this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
-        this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
-        this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
-        this.inventaire.push(new Equipment("beginner ring", "bodygear", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner ring", "accessory", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner ring", "accessory", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner ring", "accessory", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
+        this.inventaire.push(new Equipment("beginner ring", "accessory", null, 0, 10, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0))
 
     }
     updatePosition(){

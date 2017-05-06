@@ -83,8 +83,17 @@ class View{
           //all jobs
           array = Array()
           for (var i = 0; i < player.listJob.length; i++) {
-              console.log(i);
               array.push(new MenuItem(player.listJob[i].name))
+          }
+          for (var i = 0; i < player.fighter.length; i++){
+              menu.submenuItems[1].submenuItems[i].submenuItems[0].addSubMenu(array)
+          }
+          //all weapons
+          for (var i = 0; i < player.inventaire.length; i++) {
+              if(player.inventaire[i].type != "headgear" && player.inventaire[i].type != "bodygear" && player.inventaire[i].type != "accessory"){
+                  array.push(new MenuItem(player.inventaire[i].name))
+                  console.log(player.inventaire[i].name);
+              }
           }
           for (var i = 0; i < player.fighter.length; i++){
               menu.submenuItems[1].submenuItems[i].submenuItems[0].addSubMenu(array)
@@ -93,7 +102,6 @@ class View{
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
       imgLoad(images).then(function(imgResponse) {
-
           // Create our Input controls and pass through the CanvasControl to it
           var input = new CanvasInput(document, CanvasControl());
           // Pressed is the keycode of user input, and keydown means the button is down rather than press ended
@@ -217,12 +225,13 @@ class View{
                     }
                     // }
                     // console.log("SP: "+menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected);
+                    //select if job is selected
                     else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected && !menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].isSomethingSelected()){
                         menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = true
-                        console.log("job changed");
                     }
 
-                    ///la var adns le if pas encore selected
+
+                    ///la var dans le if pas encore selected
                     if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].isSomethingSelected()){
                         console.log("job changed");
                         menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].submenuItems[selector].selected = false
