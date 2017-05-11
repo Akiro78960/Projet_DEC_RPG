@@ -89,6 +89,7 @@ class View{
               menu.submenuItems[1].submenuItems[i].submenuItems[0].addSubMenu(array)
           }
           //all weapons
+          array = Array()
           for (var i = 0; i < player.inventaire.length; i++) {
               if(player.inventaire[i].type != "headgear" && player.inventaire[i].type != "bodygear" && player.inventaire[i].type != "accessory"){
                   array.push(new MenuItem(player.inventaire[i].name))
@@ -96,8 +97,45 @@ class View{
               }
           }
           for (var i = 0; i < player.fighter.length; i++){
-              menu.submenuItems[1].submenuItems[i].submenuItems[0].addSubMenu(array)
+              menu.submenuItems[1].submenuItems[i].submenuItems[1].addSubMenu(array)
           }
+
+          //all headgears
+          array = Array()
+          for (var i = 0; i < player.inventaire.length; i++) {
+              if(player.inventaire[i].type == "headgear"){
+                  array.push(new MenuItem(player.inventaire[i].name))
+                  console.log(player.inventaire[i].name);
+              }
+          }
+          for (var i = 0; i < player.fighter.length; i++){
+              menu.submenuItems[1].submenuItems[i].submenuItems[2].addSubMenu(array)
+          }
+
+          //all bodygears
+          array = Array()
+          for (var i = 0; i < player.inventaire.length; i++) {
+              if(player.inventaire[i].type == "bodygear"){
+                  array.push(new MenuItem(player.inventaire[i].name))
+                  console.log(player.inventaire[i].name);
+              }
+          }
+          for (var i = 0; i < player.fighter.length; i++){
+              menu.submenuItems[1].submenuItems[i].submenuItems[3].addSubMenu(array)
+          }
+
+          //all accessories
+          array = Array()
+          for (var i = 0; i < player.inventaire.length; i++) {
+              if(player.inventaire[i].type == "accessory"){
+                  array.push(new MenuItem(player.inventaire[i].name))
+                  console.log(player.inventaire[i].name);
+              }
+          }
+          for (var i = 0; i < player.fighter.length; i++){
+              menu.submenuItems[1].submenuItems[i].submenuItems[4].addSubMenu(array)
+          }
+
 
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
@@ -218,6 +256,7 @@ class View{
                     //if one-of-fighters-properties
                     // for (var i = 0; i < menu.submenuItems[1].submenuItems.length; i++) {
                     if(menu.submenuItems[1].submenuItems[selectorFighter].selected && !menu.submenuItems[1].submenuItems[selectorFighter].isSomethingSelected()){
+                        console.log("click on of properties");
                         menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].selected = true
                         selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].submenuItems.length
                         selectorPropertie = selector
@@ -231,12 +270,47 @@ class View{
                     }
 
 
-                    ///la var dans le if pas encore selected
+                    //modif job/equipment
                     if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].isSomethingSelected()){
                         console.log("job changed");
                         menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].submenuItems[selector].selected = false
                         menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].selected = false
                         player.fighter[selectorFighter].job = player.listJob[selector]
+                        player.fighter[selectorFighter].weapon = null
+                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                        selector = 0
+                    }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[1].isSomethingSelected()){
+                        if(player.fighter[selectorFighter].job.weaponAllowed == player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)].type){
+                            console.log("weapon changed");
+                            player.fighter[selectorFighter].weapon = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
+                            menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
+                            menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
+
+                            selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                            selector = 0
+                        }
+                    }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[2].isSomethingSelected()){
+                        console.log("headgear changed");
+                        player.fighter[selectorFighter].headgear = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
+
+                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                        selector = 0
+                    }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[3].isSomethingSelected()){
+                        console.log("bodygear changed");
+                        player.fighter[selectorFighter].bodygear = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
+
+                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                        selector = 0
+                    }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[4].isSomethingSelected()){
+                        console.log("accessory changed");
+                        player.fighter[selectorFighter].accessory = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
+                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
+
                         selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
                         selector = 0
                     }
@@ -347,6 +421,18 @@ class View{
                         ctx.fillStyle="#FFFFFF"
                         for (var i = 0; i < player.listJob.length; i++) {
                             ctx.fillText(player.listJob[i].name, 630, 225+i*35, 180, 180)
+                        }
+                        ctx.strokeRect(625, 205+35*selector, 180, 30)
+                    }
+
+
+                    if(menu.submenuItems[1].submenuItems[selectorFighter].isSomethingSelected()){
+                        ctx.fillStyle="#1111FF"
+                        ctx.strokeRect(619, 199, 202, 252)
+                        ctx.fillRect(620, 200, 200, 250)
+                        ctx.fillStyle="#FFFFFF"
+                        for (var i = 0; i < menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems.length; i++) {
+                            ctx.fillText(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[i].name, 630, 225+i*35, 180, 180)
                         }
                         ctx.strokeRect(625, 205+35*selector, 180, 30)
                     }

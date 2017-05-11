@@ -9,6 +9,7 @@ class Player{
         this.strGlobalX="x"+this.globalX
         this.strGlobalY="y"+this.globalY
         this.gold = 0
+        this.inFight = false
         this.listJob = Array()
         this.listJob[0] = new Job("fighter", ["sword"], 4, 1.2, 1.2, 1,1,1)
         this.listJob[1] = new Job("black mage", ["scepter"], 3, 1, 1, 1, 1.2, 1.2)
@@ -57,6 +58,15 @@ class Player{
         }
         this.strGlobalX="x"+this.globalX
         this.strGlobalY="y"+this.globalY
+    }
+    getInventaireIndex(str){
+        var a = 0
+        $(this.inventaire).each(function(index, el) {
+            if(el.name == str){
+                a = index
+            }
+        });
+        return a
     }
 
 }

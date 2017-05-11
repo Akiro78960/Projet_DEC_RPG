@@ -26,16 +26,16 @@ class Fighter{
         var tmp = 0
         tmp += this.atk
         if(this.weapon){
-            tmp += weapon.atk
+            tmp += this.weapon.bonusAtk
         }
         if (this.headgear) {
-            tmp += headgear.atk
+            tmp += this.headgear.bonusAtk
         }
         if (this.bodygear) {
-            tmp += bodygear.atk
+            tmp += this.bodygear.bonusAtk
         }
         if(this.accessory){
-            tmp += accessory.atk
+            tmp += this.accessory.bonusAtk
         }
         return tmp*this.job.atkMultiplier
     }
@@ -43,16 +43,16 @@ class Fighter{
         var tmp = 0
         tmp += this.def
         if(this.weapon){
-            tmp += weapon.def
+            tmp += this.weapon.bonusDef
         }
         if (this.headgear) {
-            tmp += headgear.def
+            tmp += this.headgear.bonusDef
         }
         if (this.bodygear) {
-            tmp += bodygear.def
+            tmp += this.bodygear.bonusDef
         }
         if(this.accessory){
-            tmp += accessory.def
+            tmp += this.accessory.bonusDef
         }
         return tmp*this.job.defMultiplier
     }
@@ -60,16 +60,16 @@ class Fighter{
         var tmp = 0
         tmp += this.atkM
         if(this.weapon){
-            tmp += weapon.atkM
+            tmp += this.weapon.bonusAtkM
         }
         if (this.headgear) {
-            tmp += headgear.atkM
+            tmp += this.headgear.bonusAtkM
         }
         if (this.bodygear) {
-            tmp += bodygear.atkM
+            tmp += this.bodygear.bonusAtkM
         }
         if(this.accessory){
-            tmp += accessory.atkM
+            tmp += this.accessory.bonusAtkM
         }
         return tmp*this.job.atkMMultiplier
     }
@@ -77,16 +77,16 @@ class Fighter{
         var tmp = 0
         tmp += this.defM
         if(this.weapon){
-            tmp += weapon.defM
+            tmp += this.weapon.bonusDefM
         }
         if (this.headgear) {
-            tmp += headgear.defM
+            tmp += this.headgear.bonusDefM
         }
         if (this.bodygear) {
-            tmp += bodygear.defM
+            tmp += this.bodygear.bonusDefM
         }
         if(this.accessory){
-            tmp += accessory.defM
+            tmp += this.accessory.bonusDefM
         }
         return tmp*this.job.defMMultiplier
     }
@@ -94,16 +94,16 @@ class Fighter{
         var tmp = 0
         tmp += this.speed
         if(this.weapon){
-            tmp += weapon.def
+            tmp += this.weapon.bonusSpeed
         }
         if (this.headgear) {
-            tmp += headgear.def
+            tmp += this.headgear.bonusSpeed
         }
         if (this.bodygear) {
-            tmp += bodygear.def
+            tmp += this.bodygear.bonusSpeed
         }
         if(this.accessory){
-            tmp += accessory.def
+            tmp += this.accessory.bonusSpeed
         }
         return tmp*this.job.speedMultiplier
     }
