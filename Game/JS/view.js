@@ -49,6 +49,10 @@ class View{
       fighterImage[2].src="sprites/feca.png"
       fighterImage[3].src="sprites/iop.png"
 
+      var ennemiImages = Array()
+      ennemiImages["wolf"] = new Image()
+      ennemiImages["wolf"].src = "sprites/lucario.png"
+
       var ctx = document.getElementById("canvas").getContext('2d')
 
       //menu and shit
@@ -59,6 +63,8 @@ class View{
           var selectorMax = menu.submenuItems.length
           var selectorFighter = 0//sert a garder l'image du joueur affiche
           var selectorPropertie = 0
+
+
           //inventaire//
           $(player.inventaire).each(function(index, el) {
               array.push(new MenuItem(el.name))
@@ -145,190 +151,303 @@ class View{
           // Pressed is the keycode of user input, and keydown means the button is down rather than press ended
           input.keyboard(function(pressed, keydown) {
             if (!keydown) {
-              switch(pressed) {
-                // Move player
-                case 37://left
-                    if(!menu.selected){
-                        if(player.localX != 0 || player.globalX >0){
-                            player.localX --
-                        }
-                    }
-                    if(menu.selected && !menu.isSomethingSelected() && selector > 0){
-                        selector--
-                    }
-                    if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector>1){
-                        selector--
-                    }
-                    break;
-                case 39://right
-                    if(!menu.selected){
-                        if(player.localX != (xrange-1) || player.globalX < (globalSize-1)){
-                            player.localX ++
-                        }
-                    }
-                    if(menu.selected && !menu.isSomethingSelected() && selector < selectorMax-1){
-                        selector++
-                    }
-                    if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-1){
-                        selector++
-                    }
-                    break
-                case 40://down
-                    if(!menu.selected){
-                        if(player.localY != (yrange-1) || player.globalY < (globalSize-1)){
-                            player.localY ++
-                        }
-                    }else if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-2){
-                        selector+=2
-                    }
-                    if(menu.submenuItems[1].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-1){
-                        selector++
-                    }
-                    if(menu.submenuItems[1].selected && menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-1){
-                        selector ++
-                    }
-                    break
-                case 38://up
-                    if(!menu.selected){
-                        if(player.localY != 0 || player.globalY >0){
-                            player.localY --
-                        }
-                    }else if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector>1){
-                        selector-=2
-                    }
-                    if(menu.submenuItems[1].selected && !menu.submenuItems[1].isSomethingSelected() && selector>0){
-                        selector--
-                    }
-                    if(menu.submenuItems[1].selected && menu.submenuItems[1].isSomethingSelected() && selector>0){
-                        selector--
-                    }
-                    break
-                case 27://escape
-                    if(!menu.selected){
-                        menu.selected = true
-                    }else{
-                        selector = 0
-                        //menu
-                        if(menu.selected && !menu.isSomethingSelected()){
-                            menu.selected = false
-                        }
-                        //inventaire
-                        if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected()){
-                            menu.submenuItems[0].selected = false
-                            selectorMax = menu.submenuItems.length
-                        }
-                        //fighters
-                        else if(menu.submenuItems[1].selected && !menu.submenuItems[1].isSomethingSelected()){
-                            menu.submenuItems[1].selected = false
-                            selectorMax = menu.submenuItems.length
-                        }
-                        //fighter properties
-                        else if(menu.submenuItems[1].isSomethingSelected()){
-                            for (var i = 0; i < menu.submenuItems[1].submenuItems.length; i++) {
-                                if(menu.submenuItems[1].submenuItems[i].selected && !menu.submenuItems[1].submenuItems[i].isSomethingSelected()){
-                                    menu.submenuItems[1].submenuItems[i].selected = false
-                                    selectorMax = menu.submenuItems[1].submenuItems.length
+                if(!player.inFight){
+                    switch(pressed) {
+                        // Move player
+                        case 37://left
+                            if(!menu.selected){
+                                if(player.localX != 0 || player.globalX >0){
+                                    player.localX --
+                                    startFight()
                                 }
                             }
-                        }
+                            if(menu.selected && !menu.isSomethingSelected() && selector > 0){
+                                selector--
+                            }
+                            if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector>1){
+                                selector--
+                            }
+                            break;
+                        case 39://right
+                            if(!menu.selected){
+                                if(player.localX != (xrange-1) || player.globalX < (globalSize-1)){
+                                    player.localX ++
+                                    startFight()
+                                }
+                            }
+                            if(menu.selected && !menu.isSomethingSelected() && selector < selectorMax-1){
+                                selector++
+                            }
+                            if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-1){
+                                selector++
+                            }
+                            break
+                        case 40://down
+                            if(!menu.selected){
+                                if(player.localY != (yrange-1) || player.globalY < (globalSize-1)){
+                                    player.localY ++
+                                    startFight()
+                                }
+                            }else if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-2){
+                                selector+=2
+                            }
+                            if(menu.submenuItems[1].selected && !menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-1){
+                                selector++
+                            }
+                            if(menu.submenuItems[1].selected && menu.submenuItems[0].isSomethingSelected() && selector<selectorMax-1){
+                                selector ++
+                            }
+                            break
+                        case 38://up
+                            if(!menu.selected){
+                                if(player.localY != 0 || player.globalY >0){
+                                    player.localY --
+                                    startFight()
+                                }
+                            }else if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected() && selector>1){
+                                selector-=2
+                            }
+                            if(menu.submenuItems[1].selected && !menu.submenuItems[1].isSomethingSelected() && selector>0){
+                                selector--
+                            }
+                            if(menu.submenuItems[1].selected && menu.submenuItems[1].isSomethingSelected() && selector>0){
+                                selector--
+                            }
+                            break
+                        case 27://escape
+                            if(!menu.selected){
+                                menu.selected = true
+                            }else{
+                                selector = 0
+                                //menu
+                                if(menu.selected && !menu.isSomethingSelected()){
+                                    menu.selected = false
+                                }
+                                //inventaire
+                                if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected()){
+                                    menu.submenuItems[0].selected = false
+                                    selectorMax = menu.submenuItems.length
+                                }
+                                //fighters
+                                else if(menu.submenuItems[1].selected && !menu.submenuItems[1].isSomethingSelected()){
+                                    menu.submenuItems[1].selected = false
+                                    selectorMax = menu.submenuItems.length
+                                }
+                                //fighter properties
+                                else if(menu.submenuItems[1].isSomethingSelected()){
+                                    for (var i = 0; i < menu.submenuItems[1].submenuItems.length; i++) {
+                                        if(menu.submenuItems[1].submenuItems[i].selected && !menu.submenuItems[1].submenuItems[i].isSomethingSelected()){
+                                            menu.submenuItems[1].submenuItems[i].selected = false
+                                            selectorMax = menu.submenuItems[1].submenuItems.length
+                                        }
+                                    }
+                                }
+                            }
+                            break
+                        case 13://enter
+                            //if menu principal
+                            if(menu.selected && !menu.isSomethingSelected()){
+                                menu.submenuItems[selector].selected = true
+                                selectorMax = menu.submenuItems[selector].submenuItems.length
+                                selector = 0
+                                break
+                                //if inventaire
+                            }if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected()){
+                                selectorMax = menu.submenuItems[0].submenuItems.length
+                                // menu.submenuItems[0].submenuItems[selector].selected = true
+                                break
+                            }
+                            //if fighters
+                            if(menu.submenuItems[1].selected && !menu.submenuItems[1].isSomethingSelected()){
+                                menu.submenuItems[1].submenuItems[selector].selected = true
+                                selectorMax = menu.submenuItems[1].submenuItems[selector].submenuItems.length
+                                selector = 0
+                                break
+                            }
+                            //if one-of-fighters-properties
+                            // for (var i = 0; i < menu.submenuItems[1].submenuItems.length; i++) {
+                            if(menu.submenuItems[1].submenuItems[selectorFighter].selected && !menu.submenuItems[1].submenuItems[selectorFighter].isSomethingSelected()){
+                                console.log("click on of properties");
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].selected = true
+                                selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].submenuItems.length
+                                selectorPropertie = selector
+                                selector = 0
+                            }
+                            // }
+                            // console.log("SP: "+menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected);
+                            //select if job is selected
+                            else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected && !menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].isSomethingSelected()){
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = true
+                            }
+
+
+                            //modif job/equipment
+                            if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].isSomethingSelected()){
+                                console.log("job changed");
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].submenuItems[selector].selected = false
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].selected = false
+                                player.fighter[selectorFighter].job = player.listJob[selector]
+                                player.fighter[selectorFighter].weapon = null
+                                selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                                selector = 0
+                            }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[1].isSomethingSelected()){
+                                if(player.fighter[selectorFighter].job.weaponAllowed == player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)].type){
+                                    console.log("weapon changed");
+                                    player.fighter[selectorFighter].weapon = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
+                                    menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
+                                    menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
+
+                                    selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                                    selector = 0
+                                }
+                            }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[2].isSomethingSelected()){
+                                console.log("headgear changed");
+                                player.fighter[selectorFighter].headgear = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
+
+                                selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                                selector = 0
+                            }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[3].isSomethingSelected()){
+                                console.log("bodygear changed");
+                                player.fighter[selectorFighter].bodygear = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
+
+                                selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                                selector = 0
+                            }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[4].isSomethingSelected()){
+                                console.log("accessory changed");
+                                player.fighter[selectorFighter].accessory = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
+                                menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
+
+                                selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
+                                selector = 0
+                            }
+
+                            break
+
                     }
-                    break
-                case 13://enter
-                    //if menu principal
-                    if(menu.selected && !menu.isSomethingSelected()){
-                        menu.submenuItems[selector].selected = true
-                        selectorMax = menu.submenuItems[selector].submenuItems.length
-                        selector = 0
-                        break
-                        //if inventaire
-                    }if(menu.submenuItems[0].selected && !menu.submenuItems[0].isSomethingSelected()){
-                        selectorMax = menu.submenuItems[0].submenuItems.length
-                        // menu.submenuItems[0].submenuItems[selector].selected = true
-                        break
-                    }
-                    //if fighters
-                    if(menu.submenuItems[1].selected && !menu.submenuItems[1].isSomethingSelected()){
-                        menu.submenuItems[1].submenuItems[selector].selected = true
-                        selectorMax = menu.submenuItems[1].submenuItems[selector].submenuItems.length
-                        selector = 0
-                        break
-                    }
-                    //if one-of-fighters-properties
-                    // for (var i = 0; i < menu.submenuItems[1].submenuItems.length; i++) {
-                    if(menu.submenuItems[1].submenuItems[selectorFighter].selected && !menu.submenuItems[1].submenuItems[selectorFighter].isSomethingSelected()){
-                        console.log("click on of properties");
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].selected = true
-                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].submenuItems.length
-                        selectorPropertie = selector
-                        selector = 0
-                    }
-                    // }
-                    // console.log("SP: "+menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected);
-                    //select if job is selected
-                    else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected && !menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].isSomethingSelected()){
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = true
-                    }
 
-
-                    //modif job/equipment
-                    if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].isSomethingSelected()){
-                        console.log("job changed");
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].submenuItems[selector].selected = false
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].selected = false
-                        player.fighter[selectorFighter].job = player.listJob[selector]
-                        player.fighter[selectorFighter].weapon = null
-                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
-                        selector = 0
-                    }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[1].isSomethingSelected()){
-                        if(player.fighter[selectorFighter].job.weaponAllowed == player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)].type){
-                            console.log("weapon changed");
-                            player.fighter[selectorFighter].weapon = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
-                            menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
-                            menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
-
-                            selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
-                            selector = 0
-                        }
-                    }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[2].isSomethingSelected()){
-                        console.log("headgear changed");
-                        player.fighter[selectorFighter].headgear = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
-
-                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
-                        selector = 0
-                    }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[3].isSomethingSelected()){
-                        console.log("bodygear changed");
-                        player.fighter[selectorFighter].bodygear = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
-
-                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
-                        selector = 0
-                    }else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[4].isSomethingSelected()){
-                        console.log("accessory changed");
-                        player.fighter[selectorFighter].accessory = player.inventaire[player.getInventaireIndex(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].name)]
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = false
-                        menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected = false
-
-                        selectorMax = menu.submenuItems[1].submenuItems[selectorFighter].submenuItems.length
-                        selector = 0
-                    }
-
-                    break
+                }else{//si in fight
 
                 }
+
+
               player.updatePosition()
               updateLayers()
               drawTileMap()
               drawPlayerInfo()
               drawMenu()
-              console.log("selector: " + selector + "   SelectorMax: "+selectorMax);
             }
           });
 
 
           var jsontilelayer = null
+
+
+/////////////////////////////////changer valeur du random pour rentrer en combat//////////////
+          function startFight(){
+              // si le joueur n'est pas sur le chemin
+              if(jsonResponse[0].ground[player.strGlobalX][player.strGlobalY][player.localY][player.localX] != 2 && Math.random() < 0.5){
+                  console.log("in Fight!")
+                  player.inFight = true
+                  player.generateEnnemies()
+                  for (var i = 0; i < 4; i++) {
+                      player.fighter[i].x = 2
+                      player.fighter[i].y = 7-i
+                  }
+                  player.getInfosCombat()
+              }
+          }
+
+
+          function drawTileMap() {
+            // Clear drawn map before clearing
+            context.clearRect(0, 0, CanvasControl().width, CanvasControl().height)
+            // Loop through our tiles and draw the map
+            for (var i = 0; i < 0 + xrange; i++) {
+              for (var j = 0; j < 0 + yrange; j++) {
+                tileLayer.draw(i, j)
+                if(!player.inFight){
+                    if (i === player.localX && j === player.localY) {
+                        objectLayer.draw(i, j, fighterImage[0])
+                    }
+                }else{
+                    for(var k =0; k<4; k++){
+                        if(i === player.fighter[k].x && j === player.fighter[k].y){
+                            objectLayer.draw(i, j, fighterImage[k])
+                        }
+                        if(i === player.ennemis[k].x && j === player.ennemis[k].y){
+                            objectLayer.draw(i, j, ennemiImages[player.ennemis[k].job.name])
+                        }
+                    }
+                }
+              }
+            }
+          }
+
+
+          function drawPlayerInfo(){
+              for (var i = 0; i < player.fighter.length; i++) {
+                  ctx.strokeStyle = "#321010"
+                  ctx.fillStyle="#321010"
+                  ctx.drawImage(backgroundScroll, 50+285*i,650, 180, 180)
+                  ctx.font="25px Courier New"
+                  ctx.fillText(player.fighter[i].name, 82+285*i, 712, 100)
+                  switch (i) {
+                        case 0:
+                            ctx.drawImage(fighterImage[0],110+285*i, 712, 42, 40)
+                            break;
+                        case 1:
+                            ctx.drawImage(fighterImage[1],110+285*i, 712, 42, 40)
+                            break;
+                        case 2:
+                            ctx.drawImage(fighterImage[2],110+285*i, 712, 42, 40)
+                            break;
+                        case 3:
+                            ctx.drawImage(fighterImage[3],110+285*i, 712, 42, 40)
+                            break;
+                  }
+
+                  ctx.strokeRect(90+285*i, 755, 100, 8)
+                  ctx.strokeRect(100+285*i, 785, 100, 8)
+                  ctx.font="13px Courier New"
+                  ctx.fillText("HP: "+player.fighter[i].HP+"/"+player.fighter[i].HPMax, 98+285*i, 774)
+                  ctx.fillText("MP: "+player.fighter[i].MP+"/"+player.fighter[i].MPMax, 108+285*i, 804)
+                  ctx.fillStyle="#FF0000"
+                  ctx.fillRect(91+285*i, 756, player.fighter[i].HP/player.fighter[i].HPMax*98, 6)
+                  ctx.fillStyle="#1111FF"
+                  ctx.fillRect(101+285*i, 786, player.fighter[i].MP/player.fighter[i].MPMax*98, 6)
+              }
+              if(player.inFight){
+                  //TODO: afficher info fighters during fight
+                  ctx.strokeStyle = "gray"
+                  for (var i = 0; i < player.arrayFighters.length; i++) {
+                      ctx.strokeRect(20+55*i, 550, 50, 90)
+                      ctx.fillStyle = "white"
+                      ctx.fillRect(21+55*i, 551, 48, 88)
+                      ctx.fillStyle = "red"
+                      ctx.fillRect(21+55*i, 551+88-(player.arrayFighters[i].HP/player.arrayFighters[i].HP)*88, 48, (player.arrayFighters[i].HP/player.arrayFighters[i].HP)*88)
+                      if(player.arrayFighters[i].name == player.fighter[0].name){
+                          ctx.drawImage(fighterImage[0], 20+55*i, 560, 50, 50)
+                      }else if(player.arrayFighters[i].name == player.fighter[1].name){
+                          ctx.drawImage(fighterImage[1], 20+55*i, 560, 50, 50)
+                      }else if(player.arrayFighters[i].name == player.fighter[2].name){
+                          ctx.drawImage(fighterImage[2], 20+55*i, 560, 50, 50)
+                      }else if(player.arrayFighters[i].name == player.fighter[3].name){
+                          ctx.drawImage(fighterImage[3], 20+55*i, 560, 50, 50)
+                      }else{
+                          ctx.drawImage(ennemiImages[player.arrayFighters[i].job.name], 20+55*i, 560, 50, 50)
+                      }
+                      ctx.fillStyle = "black"
+                      ctx.fillText(player.arrayFighters[i].name, 22+55*i, 620, 46, 50)
+                  }
+              }
+          }
+
+
 
           function drawMenu(){
               if(menu.selected){
@@ -441,67 +560,15 @@ class View{
               ctx.globalAlpha = 1
           }
 
-
-          function drawTileMap() {
-            // Clear drawn map before clearing
-            context.clearRect(0, 0, CanvasControl().width, CanvasControl().height)
-            // Loop through our tiles and draw the map
-            for (var i = 0; i < 0 + xrange; i++) {
-              for (var j = 0; j < 0 + yrange; j++) {
-                tileLayer.draw(i, j)
-                if (i === player.localX && j === player.localY) {
-                  objectLayer.draw(i, j, fighterImage[0])
-                }
-              }
-            }
-          }
-
-          function drawPlayerInfo(){
-
-              for (var i = 0; i < player.fighter.length; i++) {
-                  ctx.strokeStyle = "#321010"
-                  ctx.fillStyle="#321010"
-                  ctx.drawImage(backgroundScroll, 50+285*i,650, 180, 180)
-                  ctx.font="25px Courier New"
-                  ctx.fillText(player.fighter[i].name, 82+285*i, 712, 100)
-                  switch (i) {
-                        case 0:
-                            ctx.drawImage(fighterImage[0],110+285*i, 712, 42, 40)
-                            break;
-                        case 1:
-                            ctx.drawImage(fighterImage[1],110+285*i, 712, 42, 40)
-                            break;
-                        case 2:
-                            ctx.drawImage(fighterImage[2],110+285*i, 712, 42, 40)
-                            break;
-                        case 3:
-                            ctx.drawImage(fighterImage[3],110+285*i, 712, 42, 40)
-                            break;
-                  }
-
-                  ctx.strokeRect(90+285*i, 755, 100, 8)
-                  ctx.strokeRect(100+285*i, 785, 100, 8)
-                  ctx.font="13px Courier New"
-                  ctx.fillText("HP: "+player.fighter[i].HP+"/"+player.fighter[i].HPMax, 98+285*i, 774)
-                  ctx.fillText("MP: "+player.fighter[i].MP+"/"+player.fighter[i].MPMax, 108+285*i, 804)
-                  ctx.fillStyle="#FF0000"
-                  ctx.fillRect(91+285*i, 756, player.fighter[i].HP/player.fighter[i].HPMax*98, 6)
-                  ctx.fillStyle="#1111FF"
-                  ctx.fillRect(101+285*i, 786, player.fighter[i].MP/player.fighter[i].MPMax*98, 6)
-              }
-          }
-
-
               function updateLayers(){
-
                   tileLayer.setup({
                                 title: "Ground Layer",
                                 layout: jsonResponse[0].ground[player.strGlobalX][player.strGlobalY],
                                 graphics: imgResponse[0].files,
                                 graphicsDictionary: imgResponse[0].dictionary,
                                 isometric: true, // Flag used to layout grid in isometric format
-                                tileHeight: 30,
-                                tileWidth: 60,
+                                tileHeight: 40,
+                                tileWidth: 80,
                                 heightMap: {
                                 map: jsonResponse[0].height[player.strGlobalX][player.strGlobalY],
                                 // imgResponse[0] contains the first set of grpahic files[] we placed in the graphics array
@@ -509,7 +576,7 @@ class View{
                                 offset: 0
                                 },
                                 shadow: {
-                                  offset: 30, // Offset is the same height as the stack tile
+                                  offset: 40, // Offset is the same height as the stack tile
                                   verticalColor: '(5, 5, 30, 0.2)',
                                   horizontalColor: '(6, 5, 50, 0.3)'
                                 }
@@ -522,11 +589,11 @@ class View{
                     isometric: true, // Flag used to layout grid in isometric format
                     zeroIsBlank: true,
                     layout: jsonResponse[0].objects,
-                    tileHeight: 30,
-                    tileWidth: 60,
+                    tileHeight: 40,
+                    tileWidth: 80,
                     heightMap: {
                       map: jsonResponse[0].height[player.strGlobalX][player.strGlobalY],
-                      offset: 30,
+                      offset: 40,
                       heightMapOnTop: true// We want to draw only on top of the heightmap
                     }
                   })
@@ -543,8 +610,8 @@ class View{
                           graphics: imgResponse[0].files,
                           graphicsDictionary: imgResponse[0].dictionary,
                           isometric: true, // Flag used to layout grid in isometric format
-                          tileHeight: 30,
-                          tileWidth: 60,
+                          tileHeight: 40,
+                          tileWidth: 80,
                           heightMap: {
                           map: jsonResponse[0].height[player.strGlobalX][player.strGlobalY],
                           // imgResponse[0] contains the first set of grpahic files[] we placed in the graphics array
@@ -552,7 +619,7 @@ class View{
                           offset: 0
                           },
                           shadow: {
-                            offset: 30, // Offset is the same height as the stack tile
+                            offset: 40, // Offset is the same height as the stack tile
                             verticalColor: '(5, 5, 30, 0.2)',
                             horizontalColor: '(6, 5, 50, 0.3)'
                           }
@@ -563,8 +630,8 @@ class View{
               isometric: true, // Flag used to layout grid in isometric format
               zeroIsBlank: true,
               layout: jsonResponse[0].objects,
-              tileHeight: 30,
-              tileWidth: 60,
+              tileHeight: 40,
+              tileWidth: 80,
               heightMap: {
                 map: jsonResponse[0].height[player.strGlobalX][player.strGlobalY],
                 offset: 50,

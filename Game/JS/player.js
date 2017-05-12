@@ -17,11 +17,15 @@ class Player{
         this.listJob[3] = new Job("rogue", ["daggers"], 4, 1.2, 1, 1.2, 1, 1)
         this.listJob[4] = new Job("archer", ["bow"], 3, 1.2, 1, 1.2, 1, 1)
         this.listJob[5] = new Job("warrior", ["shield"], 4, 1, 1.2, 1, 1, 1.2)
+        this.ennemis = Array()
+        this.listJobEnnemis = Array()
+        this.listJobEnnemis.push(new Job("wolf", [], 3, 1,1,1.2,1,1))
         this.fighter = Array()
-        this.fighter[0] = new Fighter("monkeyPlayer", this.listJob[2])
+        this.fighter[0] = new Fighter("Monkey", this.listJob[4])
         this.fighter[1] = new Fighter("Knight", this.listJob[5])
-        this.fighter[2] = new Fighter("Fighter3", this.listJob[1])
-        this.fighter[3] = new Fighter("Fighter4", this.listJob[0])
+        this.fighter[2] = new Fighter("Feca", this.listJob[1])
+        this.fighter[3] = new Fighter("Iop", this.listJob[3])
+        this.arrayFighters = Array()
         this.inventaire = Array()
         this.inventaire.push(new Equipment("beginner sword1", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))
         this.inventaire.push(new Equipment("beginner bow","bow", null, 5, 0, 0, 3, 0, 0, 0, 0, 6, 0, 0, 0))
@@ -67,6 +71,22 @@ class Player{
             }
         });
         return a
+    }
+    generateEnnemies(){
+        for (var i = 0; i < 4; i++) {
+            this.ennemis.push(new Fighter("Ennemi " + i, this.listJobEnnemis[0], 9, 7-i, 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random())))
+        }
+    }
+    getInfosCombat(){
+        //ordre de jeu:
+        for (var i = 0; i < this.ennemis.length; i++) {
+            this.arrayFighters.push(this.ennemis[i])
+        }
+        for (var i = 0; i <this.fighter.length; i++) {
+            this.arrayFighters.push(this.fighter[i])
+        }
+        this.arrayFighters.sort(function(a,b) {return (a.getTotalSpeed() > b.getTotalSpeed()) ? 1 : ((b.getTotalSpeed() > a.getTotalSpeed()) ? -1 : 0)} )
+        this.arrayFighters.reverse()
     }
 
 }

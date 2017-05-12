@@ -32,8 +32,6 @@ function importJS(str){
 }
 
 function initGame(){
-    console.log("init")
     view = new View()
     model = new Model(new Player())
-    console.log("init done");
 }

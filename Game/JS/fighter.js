@@ -1,18 +1,20 @@
 class Fighter{
-    constructor(name, job){
+    constructor(name, job, x, y, HPMax, atk, def, atkM, defM, speed){
         this.job = job
         this.name = name
+        this.x = x || 0
+        this.y = y || 0
         this.experience = 0
         this.level = 1
-        this.HPMax = 30
+        this.HPMax = HPMax || 30
         this.HP = this.HPMax
         this.MPMax = 20
         this.MP = this.MPMax
-        this.atk = 10
-        this.def = 10
-        this.atkM = 10
-        this.defM = 10
-        this.speed = 10
+        this.atk = atk || 10
+        this.def = def || 10
+        this.atkM = atkM || 10
+        this.defM = defM || 10
+        this.speed = speed || 10
         this.crit = 5
         this.vulneFire = 0
         this.vulneIce = 0
