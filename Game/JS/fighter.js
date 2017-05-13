@@ -24,6 +24,15 @@ class Fighter{
         this.bodygear = null
         this.accessory = null
     }
+    isPosAccessible(x,y){
+        var diffx = Math.abs(x-this.x)
+        var diffy = Math.abs(y-this.y)
+        if(diffx + diffy > this.job.mobility){
+            return false
+        }else{
+            return true
+        }
+    }
     getTotalAtk(){
         var tmp = 0
         tmp += this.atk

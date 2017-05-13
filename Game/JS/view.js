@@ -53,9 +53,20 @@ class View{
       ennemiImages["wolf"] = new Image()
       ennemiImages["wolf"].src = "sprites/lucario.png"
 
+      var imageBG = new Image()
+      imageBG.src="sprites/background.jpg"
+
+      var moveImage = new Image()
+      moveImage.src="sprites/hintMove.png"
+
       var ctx = document.getElementById("canvas").getContext('2d')
 
-      //menu and shit
+
+
+
+
+///////////////////////MENUS//////////////////////
+      //menu escape
       var selector = 0
       var menu = new MenuItem("Menu")
           var array = Array()
@@ -63,7 +74,6 @@ class View{
           var selectorMax = menu.submenuItems.length
           var selectorFighter = 0//sert a garder l'image du joueur affiche
           var selectorPropertie = 0
-
 
           //inventaire//
           $(player.inventaire).each(function(index, el) {
@@ -99,19 +109,16 @@ class View{
           for (var i = 0; i < player.inventaire.length; i++) {
               if(player.inventaire[i].type != "headgear" && player.inventaire[i].type != "bodygear" && player.inventaire[i].type != "accessory"){
                   array.push(new MenuItem(player.inventaire[i].name))
-                  console.log(player.inventaire[i].name);
               }
           }
           for (var i = 0; i < player.fighter.length; i++){
               menu.submenuItems[1].submenuItems[i].submenuItems[1].addSubMenu(array)
           }
-
           //all headgears
           array = Array()
           for (var i = 0; i < player.inventaire.length; i++) {
               if(player.inventaire[i].type == "headgear"){
                   array.push(new MenuItem(player.inventaire[i].name))
-                  console.log(player.inventaire[i].name);
               }
           }
           for (var i = 0; i < player.fighter.length; i++){
@@ -123,25 +130,32 @@ class View{
           for (var i = 0; i < player.inventaire.length; i++) {
               if(player.inventaire[i].type == "bodygear"){
                   array.push(new MenuItem(player.inventaire[i].name))
-                  console.log(player.inventaire[i].name);
               }
           }
           for (var i = 0; i < player.fighter.length; i++){
               menu.submenuItems[1].submenuItems[i].submenuItems[3].addSubMenu(array)
           }
-
           //all accessories
           array = Array()
           for (var i = 0; i < player.inventaire.length; i++) {
               if(player.inventaire[i].type == "accessory"){
                   array.push(new MenuItem(player.inventaire[i].name))
-                  console.log(player.inventaire[i].name);
               }
           }
           for (var i = 0; i < player.fighter.length; i++){
               menu.submenuItems[1].submenuItems[i].submenuItems[4].addSubMenu(array)
           }
 
+
+          ////////////////Menu Fight///////////////////////////
+
+          var menuFight = new MenuItem("menuFight")
+          menuFight.addSubMenu([new MenuItem("Move"), new MenuItem("Action"), new MenuItem("End turn")])
+          var selectorMove = new Object()
+          selectorMove.x = 2
+          selectorMove.y = 0
+          selectorMove.img = new Image()
+          selectorMove.img.src = "sprites/selectorMove.png"
 
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
@@ -330,16 +344,86 @@ class View{
 
                     }
 
-                }else{//si in fight
+                }else{//else if player.inFight
+                    switch(pressed) {
+                        case 37: //left
+                            if(menuFight.submenuItems[0].selected){
+                                if(selectorMove.x > 0){
+                                    selectorMove.x--
+                                }
+                            }
+                            break
+                        case 39: //right
+                            if(menuFight.submenuItems[0].selected){
+                                if(selectorMove.x < player.localSizeMax-1){
+                                    selectorMove.x++
+                                }
+                            }
+                            break
+                        case 40: //down
+                            if(!menuFight.isSomethingSelected() && selector<selectorMax-1){
+                                selector ++
+                            }
+                            if(menuFight.submenuItems[0].selected){
+                                if(selectorMove.y < player.localSizeMax-1){
+                                    selectorMove.y++
+                                }
+                            }
+                            break
+                        case 38: //up
+                            if(!menuFight.isSomethingSelected() && selector>0){
+                                selector --
+                            }
+                            if(menuFight.submenuItems[0].selected){
+                                if(selectorMove.y > 0){
+                                    selectorMove.y--
+                                }
+                            }
+                            break
+                        case 27://escape
+                            if(menuFight.submenuItems[0].selected){
+                                menuFight.submenuItems[0].selected = false
+                            }
+                            break
+                        case 13://enter
+                            //select menuItem
+                            if(menuFight.selected && !menuFight.isSomethingSelected() && menuFight.submenuItems[selector].enabled){
+                                console.log("move selected");
+                                menuFight.submenuItems[selector].selected = true
+                                if(selector == 0){
+                                    selectorMove.x = player.arrayFighters[player.indexFighterCombat].x
+                                    selectorMove.y = player.arrayFighters[player.indexFighterCombat].y
+                                }
+                            }
+                            //confirme le deplacement
+                            else if(menuFight.submenuItems[0].selected){
+                                if(player.arrayFighters[player.indexFighterCombat].isPosAccessible(selectorMove.x, selectorMove.y) && !player.isOccupied(selectorMove.x, selectorMove.y)){
+                                    menuFight.submenuItems[0].selected = false
+                                    player.arrayFighters[player.indexFighterCombat].x = selectorMove.x
+                                    player.arrayFighters[player.indexFighterCombat].y = selectorMove.y
+                                    menuFight.submenuItems[0].enabled = false
+                                }
+                            }
+                            break
+
+                    }
+
+                    // console.log("selector: "+selector + "  selectorMax: "+selectorMax);
+                    player.updateFighters()
+                    player.getInfosCombat()
 
                 }
-
 
               player.updatePosition()
               updateLayers()
               drawTileMap()
               drawPlayerInfo()
-              drawMenu()
+              if(player.inFight){
+                  drawMenuFight()
+              }else{
+                  drawMenu()
+              }
+
             }
           });
 
@@ -359,13 +443,14 @@ class View{
                       player.fighter[i].y = 7-i
                   }
                   player.getInfosCombat()
+                  menuFight.selected = true
+                  selectorMax = menuFight.submenuItems.length
               }
           }
 
 
           function drawTileMap() {
-            // Clear drawn map before clearing
-            context.clearRect(0, 0, CanvasControl().width, CanvasControl().height)
+            ctx.drawImage(imageBG, 0, 0, CanvasControl().width, CanvasControl().height)
             // Loop through our tiles and draw the map
             for (var i = 0; i < 0 + xrange; i++) {
               for (var j = 0; j < 0 + yrange; j++) {
@@ -375,6 +460,15 @@ class View{
                         objectLayer.draw(i, j, fighterImage[0])
                     }
                 }else{
+                    //color tiles if accessible
+                    if(menuFight.submenuItems[0].selected && player.arrayFighters[player.indexFighterCombat].isPosAccessible(i,j)){
+                        context.globalAlpha = 0.5
+                        objectLayer.draw(i, j, moveImage)
+                        context.globalAlpha = 1
+                    }
+                    if(menuFight.submenuItems[0].selected && i === selectorMove.x && j === selectorMove.y){
+                        objectLayer.draw(i, j, selectorMove.img)
+                    }
                     for(var k =0; k<4; k++){
                         if(i === player.fighter[k].x && j === player.fighter[k].y){
                             objectLayer.draw(i, j, fighterImage[k])
@@ -429,7 +523,9 @@ class View{
                       ctx.fillStyle = "white"
                       ctx.fillRect(21+55*i, 551, 48, 88)
                       ctx.fillStyle = "red"
+                      ctx.globalAlpha = 0.6
                       ctx.fillRect(21+55*i, 551+88-(player.arrayFighters[i].HP/player.arrayFighters[i].HP)*88, 48, (player.arrayFighters[i].HP/player.arrayFighters[i].HP)*88)
+                      ctx.globalAlpha = 1
                       if(player.arrayFighters[i].name == player.fighter[0].name){
                           ctx.drawImage(fighterImage[0], 20+55*i, 560, 50, 50)
                       }else if(player.arrayFighters[i].name == player.fighter[1].name){
@@ -444,9 +540,42 @@ class View{
                       ctx.fillStyle = "black"
                       ctx.fillText(player.arrayFighters[i].name, 22+55*i, 620, 46, 50)
                   }
+                  ctx.strokeStyle = "black"
+                  ctx.strokeRect(19+55*player.indexFighterCombat, 549, 52, 92)
               }
           }
 
+
+
+          function drawMenuFight(){
+              if(menuFight.selected){
+                  ctx.fillStyle="#1111FF"
+                  ctx.strokeStyle = "white"
+                  ctx.globalAlpha = 0.8
+                  ctx.strokeRect(950, 380, 220, 300)
+                  ctx.fillRect(951, 381, 218, 298)
+                  fillMenuFight(menuFight)
+                  ctx.globalAlpha = 1
+              }
+          }
+
+          function fillMenuFight(foo){//prend en parametre un menuItem, auto draw & format each subMenu & selector
+              var listMenu = foo.submenuItems
+              var padding = (300-(2*40))/listMenu.length
+              ctx.fillStyle="white"
+              ctx.font="22px Courier New"
+              $(listMenu).each(function(index, el) {
+                  if(el.enabled){
+                      ctx.fillStyle="white"
+                  }else{
+                      ctx.fillStyle="grey"
+                  }
+                  ctx.fillText(el.name, 1000, 440+padding*index)
+              })
+              if(!foo.isSomethingSelected()){
+                  ctx.fillRect(985, 448+padding*selector, 90, 3)
+              }
+          }
 
 
           function drawMenu(){
@@ -559,6 +688,7 @@ class View{
               }
               ctx.globalAlpha = 1
           }
+
 
               function updateLayers(){
                   tileLayer.setup({

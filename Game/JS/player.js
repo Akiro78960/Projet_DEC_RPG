@@ -18,6 +18,7 @@ class Player{
         this.listJob[4] = new Job("archer", ["bow"], 3, 1.2, 1, 1.2, 1, 1)
         this.listJob[5] = new Job("warrior", ["shield"], 4, 1, 1.2, 1, 1, 1.2)
         this.ennemis = Array()
+        this.indexFighterCombat = 0
         this.listJobEnnemis = Array()
         this.listJobEnnemis.push(new Job("wolf", [], 3, 1,1,1.2,1,1))
         this.fighter = Array()
@@ -73,20 +74,50 @@ class Player{
         return a
     }
     generateEnnemies(){
+        console.log("generateEnnemies");
         for (var i = 0; i < 4; i++) {
-            this.ennemis.push(new Fighter("Ennemi " + i, this.listJobEnnemis[0], 9, 7-i, 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random())))
+            this.ennemis.push(new Fighter("Ennemi " + i, this.listJobEnnemis[0], 9, 7-i, 15+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random())))
         }
     }
-    getInfosCombat(){
+    getInfosCombat(){//get fighter & ennemis if alive + sort by totalSpeed
+        this.arrayFighters = Array()
         //ordre de jeu:
         for (var i = 0; i < this.ennemis.length; i++) {
-            this.arrayFighters.push(this.ennemis[i])
+            if(this.ennemis[i].HP > 0){
+                this.arrayFighters.push(this.ennemis[i])
+            }
         }
         for (var i = 0; i <this.fighter.length; i++) {
-            this.arrayFighters.push(this.fighter[i])
+            if(this.fighter[i].HP > 0){
+                this.arrayFighters.push(this.fighter[i])
+            }
         }
         this.arrayFighters.sort(function(a,b) {return (a.getTotalSpeed() > b.getTotalSpeed()) ? 1 : ((b.getTotalSpeed() > a.getTotalSpeed()) ? -1 : 0)} )
         this.arrayFighters.reverse()
+    }
+    updateFighters(){//push data from this.arrayFighters to this.ennemi & this.fighter
+        for (var i = 0; i < this.arrayFighters.length; i++) {
+            for (var j = 0; j < this.ennemis.length; j++) {
+                if(this.ennemis[j] == this.arrayFighters[i]){
+                    this.ennemis[j] = this.arrayFighters[i]
+                }
+            }
+            for (var j = 0; j < this.fighter.length; j++) {
+                if(this.fighter[j] == this.arrayFighters[i]){
+                    this.fighter[j] = this.arrayFighters[i]
+                }
+            }
+        }
+    }
+
+    isOccupied(x,y){
+        var r = false
+        $(this.arrayFighters).each(function(index, el) {
+            if(el.x == x && el.y == y){
+                r = true
+            }
+        });
+        return r
     }
 
 }

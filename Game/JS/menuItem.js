@@ -3,6 +3,7 @@ class MenuItem{
         this.name = name
         this.selected = false
         this.submenuItems = null
+        this.enabled = true
     }
     addSubMenu(a){
         this.submenuItems = a
