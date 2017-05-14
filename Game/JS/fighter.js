@@ -8,8 +8,8 @@ class Fighter{
         this.level = 1
         this.HPMax = HPMax || 30
         this.HP = this.HPMax
-        this.MPMax = 20
-        this.MP = this.MPMax
+        this.MPMax = 25
+        this.MP = 0
         this.atk = atk || 10
         this.def = def || 10
         this.atkM = atkM || 10
@@ -24,14 +24,25 @@ class Fighter{
         this.bodygear = null
         this.accessory = null
     }
-    isPosAccessible(x,y){
+    addMP(){
+        if(this.MP-10 <= this.MPMax ){
+            this.MP =+ 10
+        }else{
+            this.MP = this.MPMax
+        }
+    }
+    isAccessible(x,y, range){
         var diffx = Math.abs(x-this.x)
         var diffy = Math.abs(y-this.y)
-        if(diffx + diffy > this.job.mobility){
+        if(diffx + diffy > range){
             return false
         }else{
             return true
         }
+    }
+    attack(target){
+        target.HP -= Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))
+        return Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))
     }
     getTotalAtk(){
         var tmp = 0
@@ -117,5 +128,11 @@ class Fighter{
             tmp += this.accessory.bonusSpeed
         }
         return tmp*this.job.speedMultiplier
+    }
+    getAttackRange(){
+        var tmp = 1
+        if(this.weapon)
+            tmp = this.weapon.range
+        return tmp
     }
 }

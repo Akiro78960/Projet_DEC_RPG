@@ -109,15 +109,23 @@ class Player{
             }
         }
     }
-
-    isOccupied(x,y){
+    getUnit(x,y){
         var r = false
         $(this.arrayFighters).each(function(index, el) {
             if(el.x == x && el.y == y){
-                r = true
+                r = el
             }
         });
         return r
+    }
+    endTurn(){
+        if(this.indexFighterCombat < this.arrayFighters.length-1){
+            this.indexFighterCombat++
+        }else{
+            this.indexFighterCombat=0
+        }
+        this.arrayFighters[this.indexFighterCombat].addMP()
+        console.log("indexFighter: "+this.indexFighterCombat);
     }
 
 }

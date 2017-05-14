@@ -1,6 +1,6 @@
 class View{
     constructor(){
-
+        this.compteur = 0
     }
 
     draw(player){
@@ -60,6 +60,8 @@ class View{
       moveImage.src="sprites/hintMove.png"
 
       var ctx = document.getElementById("canvas").getContext('2d')
+
+      var dammage = 0
 
 
 
@@ -151,6 +153,7 @@ class View{
 
           var menuFight = new MenuItem("menuFight")
           menuFight.addSubMenu([new MenuItem("Move"), new MenuItem("Action"), new MenuItem("End turn")])
+          menuFight.submenuItems[1].addSubMenu([new MenuItem("Attack"), new MenuItem("Spell")])
           var selectorMove = new Object()
           selectorMove.x = 2
           selectorMove.y = 0
@@ -279,7 +282,6 @@ class View{
                                 break
                             }
                             //if one-of-fighters-properties
-                            // for (var i = 0; i < menu.submenuItems[1].submenuItems.length; i++) {
                             if(menu.submenuItems[1].submenuItems[selectorFighter].selected && !menu.submenuItems[1].submenuItems[selectorFighter].isSomethingSelected()){
                                 console.log("click on of properties");
                                 menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selector].selected = true
@@ -287,14 +289,10 @@ class View{
                                 selectorPropertie = selector
                                 selector = 0
                             }
-                            // }
-                            // console.log("SP: "+menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected);
                             //select if job is selected
                             else if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].selected && !menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].isSomethingSelected()){
                                 menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[selectorPropertie].submenuItems[selector].selected = true
                             }
-
-
                             //modif job/equipment
                             if(menu.submenuItems[1].submenuItems[selectorFighter].submenuItems[0].isSomethingSelected()){
                                 console.log("job changed");
@@ -347,68 +345,131 @@ class View{
                 }else{//else if player.inFight
                     switch(pressed) {
                         case 37: //left
-                            if(menuFight.submenuItems[0].selected){
+                            if(menuFight.submenuItems[0].selected || menuFight.submenuItems[1].submenuItems[0].selected){
                                 if(selectorMove.x > 0){
                                     selectorMove.x--
                                 }
                             }
                             break
                         case 39: //right
-                            if(menuFight.submenuItems[0].selected){
+                            if(menuFight.submenuItems[0].selected || menuFight.submenuItems[1].submenuItems[0].selected){
                                 if(selectorMove.x < player.localSizeMax-1){
                                     selectorMove.x++
                                 }
                             }
                             break
                         case 40: //down
-                            if(!menuFight.isSomethingSelected() && selector<selectorMax-1){
-                                selector ++
+                            //menuFight
+                            if(!menuFight.isSomethingSelected()){
+                                if(selector<selectorMax-1){
+                                    selector ++
+                                }else {
+                                    selector = 0
+                                }
                             }
-                            if(menuFight.submenuItems[0].selected){
+                            //if move ou attack
+                            if(menuFight.submenuItems[0].selected || menuFight.submenuItems[1].submenuItems[0].selected){
                                 if(selectorMove.y < player.localSizeMax-1){
                                     selectorMove.y++
                                 }
+                            //if action
+                            }else if(menuFight.submenuItems[1].selected){
+                                if(selector<selectorMax-1)
+                                    selector ++
+                                else
+                                    selector = 0
                             }
                             break
                         case 38: //up
-                            if(!menuFight.isSomethingSelected() && selector>0){
-                                selector --
+                            if(!menuFight.isSomethingSelected()){
+                                if(selector>0)
+                                    selector --
+                                else
+                                    selector = selectorMax-1
                             }
-                            if(menuFight.submenuItems[0].selected){
+                            if(menuFight.submenuItems[0].selected || menuFight.submenuItems[1].submenuItems[0].selected){
                                 if(selectorMove.y > 0){
                                     selectorMove.y--
                                 }
+                            }else if(menuFight.submenuItems[1].selected){
+                                if(selector>0)
+                                    selector --
+                                else
+                                    selector = selectorMax-1
                             }
                             break
                         case 27://escape
-                            if(menuFight.submenuItems[0].selected){
+                            if(menuFight.submenuItems[0].selected)
                                 menuFight.submenuItems[0].selected = false
+                            else if(menuFight.submenuItems[1].selected){
+                                if(!menuFight.submenuItems[1].isSomethingSelected())
+                                    menuFight.submenuItems[1].selected = false
+                                else if(menuFight.submenuItems[1].submenuItems[0].selected)
+                                    menuFight.submenuItems[1].submenuItems[0].selected = false
+                                else if(menuFight.submenuItems[1].submenuItems[1].selected)
+                                    menuFight.submenuItems[1].submenuItems[1].selected = false
                             }
                             break
                         case 13://enter
                             //select menuItem
                             if(menuFight.selected && !menuFight.isSomethingSelected() && menuFight.submenuItems[selector].enabled){
-                                console.log("move selected");
                                 menuFight.submenuItems[selector].selected = true
                                 if(selector == 0){
                                     selectorMove.x = player.arrayFighters[player.indexFighterCombat].x
                                     selectorMove.y = player.arrayFighters[player.indexFighterCombat].y
                                 }
+                                selector = 0
                             }
                             //confirme le deplacement
                             else if(menuFight.submenuItems[0].selected){
-                                if(player.arrayFighters[player.indexFighterCombat].isPosAccessible(selectorMove.x, selectorMove.y) && !player.isOccupied(selectorMove.x, selectorMove.y)){
+                                //verif si fighter peut aller sur tile
+                                if(player.arrayFighters[player.indexFighterCombat].isAccessible(selectorMove.x, selectorMove.y, player.arrayFighters[player.indexFighterCombat].job.mobility) && !player.getUnit(selectorMove.x, selectorMove.y)){
                                     menuFight.submenuItems[0].selected = false
                                     player.arrayFighters[player.indexFighterCombat].x = selectorMove.x
                                     player.arrayFighters[player.indexFighterCombat].y = selectorMove.y
                                     menuFight.submenuItems[0].enabled = false
+                                    //place le selector automatiquement
+                                    if(!menuFight.submenuItems[0].enabled){
+                                        if(!menuFight.submenuItems[1].enabled){
+                                            selector = 2
+                                        }else{
+                                            selector = 1
+                                        }
+                                    }
                                 }
+                            }
+                            //menu actions
+                            else if(menuFight.submenuItems[1].selected){
+                                if(!menuFight.submenuItems[1].isSomethingSelected()){
+                                    menuFight.submenuItems[1].submenuItems[selector].selected = true
+                                    selectorMove.x = player.arrayFighters[player.indexFighterCombat].x
+                                    selectorMove.y = player.arrayFighters[player.indexFighterCombat].y
+                                }
+                                //Attack
+                                else if(menuFight.submenuItems[1].submenuItems[0].selected){
+                                    if(player.getUnit(selectorMove.x, selectorMove.y) && player.arrayFighters[player.indexFighterCombat].isAccessible(selectorMove.x, selectorMove.y, player.arrayFighters[player.indexFighterCombat].getAttackRange()) && !(player.arrayFighters[player.indexFighterCombat].x == selectorMove.x && player.arrayFighters[player.indexFighterCombat].y == selectorMove.y)){
+                                        dammage = player.arrayFighters[player.indexFighterCombat].attack(player.getUnit(selectorMove.x, selectorMove.y))
+                                        displayDammage(selectorMove.x, selectorMove.y, dammage)
+                                        menuFight.submenuItems[1].submenuItems[0].selected = false
+                                        menuFight.submenuItems[1].selected = false
+                                        menuFight.submenuItems[1].enabled = false
+                                    }
+
+                                }
+                            }
+                            //fin de tour
+                            if(menuFight.submenuItems[2].selected){
+                                menuFight.submenuItems[2].selected = false
+                                selector = 0
+                                selectorMax = menuFight.submenuItems.length
+                                menuFight.submenuItems[0].enabled = true
+                                menuFight.submenuItems[1].enabled = true
+                                player.endTurn()
                             }
                             break
 
                     }
-
-                    // console.log("selector: "+selector + "  selectorMax: "+selectorMax);
+                    console.log("selector: "+selector + "  selectorMax: "+selectorMax);
                     player.updateFighters()
                     player.getInfosCombat()
 
@@ -430,7 +491,22 @@ class View{
 
           var jsontilelayer = null
 
+          function displayDammage(x,y,dammage){
+            //   ctx.fillStyle = "red"
+            //   var compteur = 0
+            //   while(compteur < 10){
+            //       setTimeout(function(){
+            //           compteur ++
+            //           console.log(compteur);
+            //       },10);
+            //   }
+            //   while(this.compteur < 60){
+            //       console.log(dammage);
+            //       ctx.fillText("-"+dammage, 300, 500-this.compteur)
+            //   }
 
+
+          }
 /////////////////////////////////changer valeur du random pour rentrer en combat//////////////
           function startFight(){
               // si le joueur n'est pas sur le chemin
@@ -445,6 +521,7 @@ class View{
                   player.getInfosCombat()
                   menuFight.selected = true
                   selectorMax = menuFight.submenuItems.length
+                  player.arrayFighters[player.indexFighterCombat].addMP()
               }
           }
 
@@ -460,20 +537,26 @@ class View{
                         objectLayer.draw(i, j, fighterImage[0])
                     }
                 }else{
-                    //color tiles if accessible
-                    if(menuFight.submenuItems[0].selected && player.arrayFighters[player.indexFighterCombat].isPosAccessible(i,j)){
+                    //color tiles if deplacement
+                    if(menuFight.submenuItems[0].selected && player.arrayFighters[player.indexFighterCombat].isAccessible(i,j,  player.arrayFighters[player.indexFighterCombat].job.mobility)){
                         context.globalAlpha = 0.5
                         objectLayer.draw(i, j, moveImage)
                         context.globalAlpha = 1
                     }
-                    if(menuFight.submenuItems[0].selected && i === selectorMove.x && j === selectorMove.y){
+                    //color tile if Attack
+                    if(menuFight.submenuItems[1].submenuItems[0].selected && player.arrayFighters[player.indexFighterCombat].isAccessible(i, j, player.arrayFighters[player.indexFighterCombat].getAttackRange()) && !(player.arrayFighters[player.indexFighterCombat].x === i && player.arrayFighters[player.indexFighterCombat].y === j)){
+                        context.globalAlpha = 0.5
+                        objectLayer.draw(i, j, moveImage)
+                        context.globalAlpha = 1
+                    }
+                    if((menuFight.submenuItems[0].selected || menuFight.submenuItems[1].submenuItems[0].selected) && i === selectorMove.x && j === selectorMove.y){
                         objectLayer.draw(i, j, selectorMove.img)
                     }
                     for(var k =0; k<4; k++){
-                        if(i === player.fighter[k].x && j === player.fighter[k].y){
+                        if(i === player.fighter[k].x && j === player.fighter[k].y && player.fighter[k].HP > 0){
                             objectLayer.draw(i, j, fighterImage[k])
                         }
-                        if(i === player.ennemis[k].x && j === player.ennemis[k].y){
+                        if(i === player.ennemis[k].x && j === player.ennemis[k].y && player.ennemis[k].HP > 0){
                             objectLayer.draw(i, j, ennemiImages[player.ennemis[k].job.name])
                         }
                     }
@@ -524,7 +607,7 @@ class View{
                       ctx.fillRect(21+55*i, 551, 48, 88)
                       ctx.fillStyle = "red"
                       ctx.globalAlpha = 0.6
-                      ctx.fillRect(21+55*i, 551+88-(player.arrayFighters[i].HP/player.arrayFighters[i].HP)*88, 48, (player.arrayFighters[i].HP/player.arrayFighters[i].HP)*88)
+                      ctx.fillRect(21+55*i, 551+88-(player.arrayFighters[i].HP/player.arrayFighters[i].HPMax)*88, 48, (player.arrayFighters[i].HP/player.arrayFighters[i].HPMax)*88)
                       ctx.globalAlpha = 1
                       if(player.arrayFighters[i].name == player.fighter[0].name){
                           ctx.drawImage(fighterImage[0], 20+55*i, 560, 50, 50)
@@ -548,13 +631,16 @@ class View{
 
 
           function drawMenuFight(){
-              if(menuFight.selected){
+              if(menuFight.selected && !menuFight.submenuItems[0].selected && !menuFight.submenuItems[1].submenuItems[0].selected){
                   ctx.fillStyle="#1111FF"
                   ctx.strokeStyle = "white"
                   ctx.globalAlpha = 0.8
                   ctx.strokeRect(950, 380, 220, 300)
                   ctx.fillRect(951, 381, 218, 298)
-                  fillMenuFight(menuFight)
+                  if(!menuFight.isSomethingSelected())
+                    fillMenuFight(menuFight)
+                  else if(menuFight.submenuItems[1].selected)
+                      fillMenuFight(menuFight.submenuItems[1])
                   ctx.globalAlpha = 1
               }
           }

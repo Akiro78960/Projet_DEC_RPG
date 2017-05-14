@@ -19,7 +19,7 @@ window.onload = function(){
 
 
 function tick(){
-    // view.drawPlayerInfo()
+    view.compteur++
     requestAnimationFrame(tick)
 }
 
