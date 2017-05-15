@@ -15,7 +15,7 @@ class Player{
         this.listJob[1] = new Job("black mage", ["scepter"], 3, 1, 1, 1, 1.2, 1.2)
         this.listJob[2] = new Job("white mage", ["rod"], 3, 1, 1, 1, 1.2, 1.2)
         this.listJob[3] = new Job("rogue", ["daggers"], 4, 1.2, 1, 1.2, 1, 1)
-        this.listJob[4] = new Job("archer", ["bow"], 3, 1.2, 1, 1.2, 1, 1)
+        this.listJob[4] = new Job("archer", ["bow"], 3, 1.4, 0.8, 1.2, 1, 1)
         this.listJob[5] = new Job("warrior", ["shield"], 4, 1, 1.2, 1, 1, 1.2)
         this.ennemis = Array()
         this.indexFighterCombat = 0
@@ -25,7 +25,7 @@ class Player{
         this.fighter[0] = new Fighter("Monkey", this.listJob[4])
         this.fighter[1] = new Fighter("Knight", this.listJob[5])
         this.fighter[2] = new Fighter("Feca", this.listJob[1])
-        this.fighter[3] = new Fighter("Iop", this.listJob[3])
+        this.fighter[3] = new Fighter("Iop", this.listJob[0])
         this.arrayFighters = Array()
         this.inventaire = Array()
         this.inventaire.push(new Equipment("beginner sword1", "sword", null, 1, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0))

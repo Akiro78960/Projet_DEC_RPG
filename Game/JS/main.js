@@ -9,19 +9,15 @@ importJS("fighter.js")
 importJS("job.js")
 importJS("equipment.js")
 importJS("menuItem.js")
+importJS("dammageDisplay.js")
 importJS("lib/jquery-3.2.1.min.js")
 
 window.onload = function(){
     initGame()
     view.draw(model.player)
-    tick()
 }
 
 
-function tick(){
-    view.compteur++
-    requestAnimationFrame(tick)
-}
 
 //importe des fichiers JS dans le head du html
 function importJS(str){

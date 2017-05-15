@@ -62,6 +62,7 @@ class View{
       var ctx = document.getElementById("canvas").getContext('2d')
 
       var dammage = 0
+      var dammageDisplay = null
 
 
 
@@ -159,6 +160,8 @@ class View{
           selectorMove.y = 0
           selectorMove.img = new Image()
           selectorMove.img.src = "sprites/selectorMove.png"
+
+
 
 
       // imgLoad uses Promises, once the images have loaded we continue and use the returned imgResponse
@@ -449,10 +452,11 @@ class View{
                                 else if(menuFight.submenuItems[1].submenuItems[0].selected){
                                     if(player.getUnit(selectorMove.x, selectorMove.y) && player.arrayFighters[player.indexFighterCombat].isAccessible(selectorMove.x, selectorMove.y, player.arrayFighters[player.indexFighterCombat].getAttackRange()) && !(player.arrayFighters[player.indexFighterCombat].x == selectorMove.x && player.arrayFighters[player.indexFighterCombat].y == selectorMove.y)){
                                         dammage = player.arrayFighters[player.indexFighterCombat].attack(player.getUnit(selectorMove.x, selectorMove.y))
-                                        displayDammage(selectorMove.x, selectorMove.y, dammage)
+                                        dammageDisplay = new DammageDisplay(dammage, selectorMove.x, selectorMove.y)
                                         menuFight.submenuItems[1].submenuItems[0].selected = false
                                         menuFight.submenuItems[1].selected = false
                                         menuFight.submenuItems[1].enabled = false
+                                        dammageDisplay.render()
                                     }
 
                                 }
@@ -477,36 +481,12 @@ class View{
 
               player.updatePosition()
               updateLayers()
-              drawTileMap()
-              drawPlayerInfo()
-              if(player.inFight){
-                  drawMenuFight()
-              }else{
-                  drawMenu()
-              }
-
             }
           });
 
 
           var jsontilelayer = null
 
-          function displayDammage(x,y,dammage){
-            //   ctx.fillStyle = "red"
-            //   var compteur = 0
-            //   while(compteur < 10){
-            //       setTimeout(function(){
-            //           compteur ++
-            //           console.log(compteur);
-            //       },10);
-            //   }
-            //   while(this.compteur < 60){
-            //       console.log(dammage);
-            //       ctx.fillText("-"+dammage, 300, 500-this.compteur)
-            //   }
-
-
-          }
 /////////////////////////////////changer valeur du random pour rentrer en combat//////////////
           function startFight(){
               // si le joueur n'est pas sur le chemin
@@ -635,8 +615,14 @@ class View{
                   ctx.fillStyle="#1111FF"
                   ctx.strokeStyle = "white"
                   ctx.globalAlpha = 0.8
-                  ctx.strokeRect(950, 380, 220, 300)
-                  ctx.fillRect(951, 381, 218, 298)
+                  ctx.strokeRect(950, 300, 220, 80)
+                  ctx.fillRect(951, 301, 218, 78)
+                  ctx.strokeRect(950, 400, 220, 250)
+                  ctx.fillRect(951, 401, 218, 248)
+                  ctx.fillStyle = "white"
+                  ctx.font="22px Courier New"
+                  ctx.fillText("Name: "+player.arrayFighters[player.indexFighterCombat].name, 970, 328, 180, 40)
+                  ctx.fillText("Job: "+player.arrayFighters[player.indexFighterCombat].job.name, 970, 362, 180, 40)
                   if(!menuFight.isSomethingSelected())
                     fillMenuFight(menuFight)
                   else if(menuFight.submenuItems[1].selected)
@@ -656,12 +642,27 @@ class View{
                   }else{
                       ctx.fillStyle="grey"
                   }
-                  ctx.fillText(el.name, 1000, 440+padding*index)
+                  ctx.fillText(el.name, 1000, 450+padding*index)
               })
               if(!foo.isSomethingSelected()){
-                  ctx.fillRect(985, 448+padding*selector, 90, 3)
+                  ctx.fillRect(985, 458+padding*selector, 90, 3)
               }
           }
+
+
+          function tick(){
+              drawTileMap()
+              drawPlayerInfo()
+              if(player.inFight){
+                  drawMenuFight()
+              }else{
+                  drawMenu()
+              }
+              if(dammageDisplay)
+                dammageDisplay.render(ctx)
+              requestAnimationFrame(tick)
+          }
+
 
 
           function drawMenu(){
@@ -869,6 +870,7 @@ class View{
             // Call draw Tile Map function
             drawTileMap()
             drawPlayerInfo()
+            tick()
       })
       })
     })
