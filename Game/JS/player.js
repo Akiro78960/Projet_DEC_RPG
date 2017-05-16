@@ -119,13 +119,22 @@ class Player{
         return r
     }
     endTurn(){
-        if(this.indexFighterCombat < this.arrayFighters.length-1){
+        if(this.indexFighterCombat < this.arrayFighters.length-1)
             this.indexFighterCombat++
-        }else{
+        else
             this.indexFighterCombat=0
-        }
         this.arrayFighters[this.indexFighterCombat].addMP()
-        console.log("indexFighter: "+this.indexFighterCombat);
+        for (var i = 0; i < this.ennemis.length; i++) {
+            if(this.ennemis[i] == this.arrayFighters[this.indexFighterCombat]){
+                this.arrayFighters[this.indexFighterCombat].beIntelligent(this.fighter)
+                this.endTurn()
+                // setTimeout(this.triggerAI, 1000, this.endTurn)
+            }
+        }
     }
+    // triggerAI(x){
+    //     console.log("AI Triggered");
+    //     x()
+    // }
 
 }

@@ -22,7 +22,9 @@ class Fighter{
         this.weapon = null
         this.headgear = null
         this.bodygear = null
+        this.compteur = 0
         this.accessory = null
+        this.dammageDisplay = new DammageDisplay(0, this.x, this.y)
     }
     addMP(){
         if(this.MP-10 <= this.MPMax ){
@@ -41,6 +43,7 @@ class Fighter{
         }
     }
     attack(target){
+        console.log(Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef())));
         target.HP -= Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))
         return Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))
     }
@@ -129,10 +132,54 @@ class Fighter{
         }
         return tmp*this.job.speedMultiplier
     }
+    tick(){
+        this.compteur++
+    }
     getAttackRange(){
         var tmp = 1
         if(this.weapon)
             tmp = this.weapon.range
         return tmp
+    }
+    beIntelligent(arrayAlly){
+        console.log("intelligent");
+        var attacked = false
+        var moved = false
+        var distanceMin = 420
+        var indexMin = null
+        var indexAllySorted = arrayAlly
+        var target = null
+
+        console.log(indexAllySorted);
+        for(var i = 0; i<arrayAlly.length; i++){
+            if(this.getDistanceTo(arrayAlly[i].x, arrayAlly[i].y) < distanceMin){
+                distanceMin = this.getDistanceTo(arrayAlly[i].x, arrayAlly[i].y)
+                indexMin = i
+                console.log();
+            }
+        }
+        console.log(arrayAlly[indexMin]);//display Ally plus proche de this
+
+        for(var i = 0; i<arrayAlly.length; i++){
+            if(!attacked && ((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
+                console.log("target: " + arrayAlly[i].name);
+                this.attack(arrayAlly[i])
+                this.dammageDisplay.compteur = 0
+                this.dammageDisplay.str = -Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+arrayAlly[i].getTotalDef()))
+                this.dammageDisplay.x = arrayAlly[i].x
+                this.dammageDisplay.y = arrayAlly[i].y
+                attacked = true
+            }
+            else if(!moved && !((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
+                moved = true;
+
+            }
+        }
+    }
+    moveTo(distance){
+
+    }
+    getDistanceTo(x,y){
+        return Math.abs(x - this.x) + Math.abs(y - this.y)
     }
 }

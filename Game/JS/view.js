@@ -62,7 +62,6 @@ class View{
       var ctx = document.getElementById("canvas").getContext('2d')
 
       var dammage = 0
-      var dammageDisplay = null
 
 
 
@@ -345,7 +344,7 @@ class View{
 
                     }
 
-                }else{//else if player.inFight
+                }else if(player.fighter.indexOf(player.arrayFighters[player.indexFighterCombat]) != -1){//else if player.inFight
                     switch(pressed) {
                         case 37: //left
                             if(menuFight.submenuItems[0].selected || menuFight.submenuItems[1].submenuItems[0].selected){
@@ -452,11 +451,13 @@ class View{
                                 else if(menuFight.submenuItems[1].submenuItems[0].selected){
                                     if(player.getUnit(selectorMove.x, selectorMove.y) && player.arrayFighters[player.indexFighterCombat].isAccessible(selectorMove.x, selectorMove.y, player.arrayFighters[player.indexFighterCombat].getAttackRange()) && !(player.arrayFighters[player.indexFighterCombat].x == selectorMove.x && player.arrayFighters[player.indexFighterCombat].y == selectorMove.y)){
                                         dammage = player.arrayFighters[player.indexFighterCombat].attack(player.getUnit(selectorMove.x, selectorMove.y))
-                                        dammageDisplay = new DammageDisplay(dammage, selectorMove.x, selectorMove.y)
+                                        player.arrayFighters[player.indexFighterCombat].dammageDisplay.compteur = 0
+                                        player.arrayFighters[player.indexFighterCombat].dammageDisplay.str = -dammage
+                                        player.arrayFighters[player.indexFighterCombat].dammageDisplay.x = selectorMove.x
+                                        player.arrayFighters[player.indexFighterCombat].dammageDisplay.y = selectorMove.y
                                         menuFight.submenuItems[1].submenuItems[0].selected = false
                                         menuFight.submenuItems[1].selected = false
                                         menuFight.submenuItems[1].enabled = false
-                                        dammageDisplay.render()
                                     }
 
                                 }
@@ -611,7 +612,7 @@ class View{
 
 
           function drawMenuFight(){
-              if(menuFight.selected && !menuFight.submenuItems[0].selected && !menuFight.submenuItems[1].submenuItems[0].selected){
+              if(menuFight.selected && !menuFight.submenuItems[0].selected && !menuFight.submenuItems[1].submenuItems[0].selected && player.fighter.indexOf(player.arrayFighters[player.indexFighterCombat]) != -1){
                   ctx.fillStyle="#1111FF"
                   ctx.strokeStyle = "white"
                   ctx.globalAlpha = 0.8
@@ -658,8 +659,9 @@ class View{
               }else{
                   drawMenu()
               }
-              if(dammageDisplay)
-                dammageDisplay.render(ctx)
+              for (var i = 0; i < player.arrayFighters.length; i++) {
+                  player.arrayFighters[i].dammageDisplay.render(ctx)
+              }
               requestAnimationFrame(tick)
           }
 

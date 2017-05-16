@@ -3,13 +3,15 @@ class DammageDisplay{
         this.str = -str
         this.x = x
         this.y = y
-        this.compteur = 0
+        this.compteur = 100
+        console.log("new DD");
     }
     tick(){
         this.compteur++
         console.log(this.compteur);
     }
     render(ctx){
+        console.log("render");
         if(this.compteur<= 60){
             this.tick()
             ctx.font="35px Arial"
