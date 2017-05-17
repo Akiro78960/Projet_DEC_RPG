@@ -11,7 +11,6 @@ class DammageDisplay{
         console.log(this.compteur);
     }
     render(ctx){
-        console.log("render");
         if(this.compteur<= 60){
             this.tick()
             ctx.font="35px Arial"
@@ -20,7 +19,7 @@ class DammageDisplay{
             var posX = (this.x - this.y)*40 + 517
             var posY = (this.x + this.y)*20 + 80
             ctx.fillText(this.str, posX, posY-this.compteur*2)
-            console.log("posX: "+posX+"  posY: "+posY);
+            // console.log("posX: "+posX+"  posY: "+posY);
         }
     }
 

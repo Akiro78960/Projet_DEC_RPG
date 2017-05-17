@@ -126,7 +126,7 @@ class Player{
         this.arrayFighters[this.indexFighterCombat].addMP()
         for (var i = 0; i < this.ennemis.length; i++) {
             if(this.ennemis[i] == this.arrayFighters[this.indexFighterCombat]){
-                this.arrayFighters[this.indexFighterCombat].beIntelligent(this.fighter)
+                this.arrayFighters[this.indexFighterCombat].beIntelligent(this.fighter, this)
                 this.endTurn()
                 // setTimeout(this.triggerAI, 1000, this.endTurn)
             }

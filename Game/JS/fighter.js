@@ -141,16 +141,15 @@ class Fighter{
             tmp = this.weapon.range
         return tmp
     }
-    beIntelligent(arrayAlly){
+    beIntelligent(arrayAlly, player){
         console.log("intelligent");
         var attacked = false
         var moved = false
         var distanceMin = 420
         var indexMin = null
         var indexAllySorted = arrayAlly
-        var target = null
+        var stepLeft = this.job.mobility
 
-        console.log(indexAllySorted);
         for(var i = 0; i<arrayAlly.length; i++){
             if(this.getDistanceTo(arrayAlly[i].x, arrayAlly[i].y) < distanceMin){
                 distanceMin = this.getDistanceTo(arrayAlly[i].x, arrayAlly[i].y)
@@ -159,6 +158,38 @@ class Fighter{
             }
         }
         console.log(arrayAlly[indexMin]);//display Ally plus proche de this
+
+        // verif si a cote de qqun
+        for(var i = 0; i<arrayAlly.length; i++){
+            if(((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
+                stepLeft = 0
+            }
+        }
+
+
+        while(this.getDistanceTo(arrayAlly[indexMin].x,arrayAlly[indexMin].y) >1 && stepLeft>0){
+            if(this.x > arrayAlly[indexMin].x && !player.getUnit(this.x-1, this.y)){
+                this.x--
+                stepLeft--
+            }else if(this.y > arrayAlly[indexMin].y && !player.getUnit(this.x, this.y-1)){
+                this.y--
+                stepLeft--
+            }else if(this.x < arrayAlly[indexMin].x && !player.getUnit(this.x+1, this.y)){
+                this.x ++
+                stepLeft --
+            }else if(this.y < arrayAlly[indexMin].y && !player.getUnit(this.x, this.y+1)){
+                this.y++
+                stepLeft--
+            }else{
+                stepLeft=0
+            }
+            //si qqun a cote, stop
+            for(var i = 0; i<arrayAlly.length; i++){
+                if(((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
+                    stepLeft = 0
+                }
+            }
+        }
 
         for(var i = 0; i<arrayAlly.length; i++){
             if(!attacked && ((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
@@ -176,7 +207,7 @@ class Fighter{
             }
         }
     }
-    moveTo(distance){
+    moveTo(x,y){
 
     }
     getDistanceTo(x,y){
