@@ -1,0 +1,42 @@
+RPG ISO: manuel d'utilisation
+
+RPG ISO est un RPG ou le joueur evolue dans un monde fantastique, et doit se battre contres les creatures peuplant ce monde.
+Le joueur aura acces a 4 combatants qui combatront contre 4 ennemis. Les ennemis seront geres par une intelligence artificielle.
+
+
+Commandes utilisees: Fleches directionnelles pour le deplacement du personnage/selections de menus
+		Enter pour valider la selection
+		Escape ou Backspace pour acceder au menu principal / annuler la selection.
+
+Chaque combatant possedent plusieur caracteristiques:
+	-Attaque: augmente l'attaque du combatant
+	-Defense: augmente la defense du combatant
+	-Attaque Magique : augmente l'attaque Magique du combatant(dommages des spells, pas encore implemente)
+	-Defense Magique : augmente la defense face aux spells
+	-Vitesse : determine l'ordre de jeu des combatants 
+	-Critique : determine le % de chance que le combattant fasse un coup critique (+100% dammage)
+	-Classe : determine le type d'arme/spells que le combatant peut utiliser. Chaque Classe a egalement des multiplicateurs de stats
+
+Le joueur a 10% de chance de rentrer en combat a chaque deplacement (si il n'est pas sur le chemin).
+
+Une fois que le joueur rentre en combat, les combatants sont places automatiquement. 
+
+Chaque combatant va commencer a 0 point de Mana, et va ensuite en gagner 10 par tour.
+
+3 actions sont possible durant le combat: Se deplacer, Action(attaque) et Fin de tour. Une seul des ses actions est possible par tour.
+Quand le combatant a fini son tour, le combatant suivant va jouer.
+
+A la fin du combat, chaque combattant encore vivant se verra attribue 20 points d'experience. Le seuil pour monter de niveau est de 100xp.
+
+Pour voir les stats des combattants, l'usager doit aller sur le menu Principal avec Escape/backspace, ensuite selectionner Fighter et le combattant voulu.
+
+
+
+
+
+L'application a cependant plusieurs limites:
+	-les IA ne prennent pas de pause au moment de jouer, ce qui fait que toutes les IA vont jouer en meme temps
+	-Les spells ne sont pas implementes
+
+
+

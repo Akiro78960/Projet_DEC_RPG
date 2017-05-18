@@ -1,0 +1,4 @@
+Pour l'installation: 
+		Copiez la racine du projet dans votre repertoire Apache. Ensuite clickez simplement sur "Game" dans le site web et le jeu devrais demarrer
+		
+Si vous acceddez au site par son url, simplement clickez sur "Game" pour demarrer le jeu

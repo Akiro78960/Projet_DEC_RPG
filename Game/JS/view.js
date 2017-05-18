@@ -521,18 +521,20 @@ class View{
 /////////////////////////////////changer valeur du random pour rentrer en combat//////////////
           function startFight(){
               // si le joueur n'est pas sur le chemin
-              if(jsonResponse[0].ground[player.strGlobalX][player.strGlobalY][player.localY][player.localX] != 2 && Math.random() < 0.1){
-                  console.log("in Fight!")
-                  player.inFight = true
-                  player.generateEnnemies()
-                  for (var i = 0; i < 4; i++) {
-                      player.fighter[i].x = 2
-                      player.fighter[i].y = 7-i
+              if(jsonResponse[0].ground[player.strGlobalX][player.strGlobalY][player.localY]){
+                  if(jsonResponse[0].ground[player.strGlobalX][player.strGlobalY][player.localY][player.localX] != 2 && Math.random() < 0.1){
+                      console.log("in Fight!")
+                      player.inFight = true
+                      player.generateEnnemies()
+                      for (var i = 0; i < 4; i++) {
+                          player.fighter[i].x = 2
+                          player.fighter[i].y = 7-i
+                      }
+                      player.getInfosCombat()
+                      menuFight.selected = true
+                      selectorMax = menuFight.submenuItems.length
+                      player.arrayFighters[player.indexFighterCombat].addMP()
                   }
-                  player.getInfosCombat()
-                  menuFight.selected = true
-                  selectorMax = menuFight.submenuItems.length
-                  player.arrayFighters[player.indexFighterCombat].addMP()
               }
           }
 
@@ -788,7 +790,7 @@ class View{
                         if(selector == 0){
                             ctx.strokeRect(390, 200, 220, 30)
                         }else{
-                            ctx.strokeRect(590, 280+50*(selector-1), 220, 30)
+                            ctx.strokeRect(590, 300+50*(selector-1), 220, 30)
                         }
                     }
                     ////////////AFFICHAGE jobs//////////////
