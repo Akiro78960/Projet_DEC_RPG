@@ -477,6 +477,12 @@ class View{
                     console.log("selector: "+selector + "  selectorMax: "+selectorMax);
                     player.updateFighters()
                     player.getInfosCombat()
+                    if(player.getWinner() == "victory"){
+                        player.inFight = false
+                    }else if(player.getWinner() == "defeat"){
+
+                    }
+                    console.log(player.getWinner());
 
                 }
 

@@ -151,7 +151,7 @@ class Fighter{
         var stepLeft = this.job.mobility
 
         for(var i = 0; i<arrayAlly.length; i++){
-            if(this.getDistanceTo(arrayAlly[i].x, arrayAlly[i].y) < distanceMin){
+            if(this.getDistanceTo(arrayAlly[i].x, arrayAlly[i].y) < distanceMin && arrayAlly[i].HP>0){
                 distanceMin = this.getDistanceTo(arrayAlly[i].x, arrayAlly[i].y)
                 indexMin = i
                 console.log();
@@ -161,7 +161,7 @@ class Fighter{
 
         // verif si a cote de qqun
         for(var i = 0; i<arrayAlly.length; i++){
-            if(((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
+            if(arrayAlly[i].HP>0 && ((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
                 stepLeft = 0
             }
         }
@@ -192,7 +192,7 @@ class Fighter{
         }
 
         for(var i = 0; i<arrayAlly.length; i++){
-            if(!attacked && ((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
+            if(!attacked && arrayAlly[i].HP>0 && ((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
                 console.log("target: " + arrayAlly[i].name);
                 this.attack(arrayAlly[i])
                 this.dammageDisplay.compteur = 0
@@ -203,12 +203,8 @@ class Fighter{
             }
             else if(!moved && !((Math.abs(arrayAlly[i].x - this.x) == 1 && arrayAlly[i].y==this.y) || (Math.abs(arrayAlly[i].y - this.y) == 1 && arrayAlly[i].x==this.x))){
                 moved = true;
-
             }
         }
-    }
-    moveTo(x,y){
-
     }
     getDistanceTo(x,y){
         return Math.abs(x - this.x) + Math.abs(y - this.y)

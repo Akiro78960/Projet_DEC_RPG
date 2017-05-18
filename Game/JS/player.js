@@ -128,13 +128,29 @@ class Player{
             if(this.ennemis[i] == this.arrayFighters[this.indexFighterCombat]){
                 this.arrayFighters[this.indexFighterCombat].beIntelligent(this.fighter, this)
                 this.endTurn()
-                // setTimeout(this.triggerAI, 1000, this.endTurn)
+                // setTimeout(this.endTurn, 1000)
             }
         }
     }
-    // triggerAI(x){
-    //     console.log("AI Triggered");
-    //     x()
-    // }
+    getWinner(){
+        var allyDead = 0
+        var ennemiDead = 0
 
+        for (var i = 0; i < this.fighter.length; i++) {
+            if(this.fighter[i].HP <= 0){
+                allyDead++
+            }
+        }
+        for (var i = 0; i < this.ennemis.length; i++) {
+            if(this.ennemis[i].HP <= 0){
+                ennemiDead++
+            }
+        }
+
+        if(allyDead == this.fighter.length){
+            return "defeat"
+        }else if(ennemiDead == this.ennemis.length){
+            return "victory"
+        }else return false
+    }
 }
