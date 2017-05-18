@@ -75,6 +75,7 @@ class Player{
     }
     generateEnnemies(){
         console.log("generateEnnemies");
+        this.ennemis = Array()
         for (var i = 0; i < 4; i++) {
             this.ennemis.push(new Fighter("Ennemi " + i, this.listJobEnnemis[0], 9, 7-i, 15+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random()), 5+Math.floor(5*Math.random())))
         }
@@ -149,7 +150,7 @@ class Player{
 
         if(allyDead == this.fighter.length){
             return "defeat"
-        }else if(ennemiDead == this.ennemis.length){
+        }else if(ennemiDead == this.ennemis.length && this.ennemis.length>0){
             return "victory"
         }else return false
     }

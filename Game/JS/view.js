@@ -63,6 +63,8 @@ class View{
 
       var dammage = 0
 
+      var endText = null
+
 
 
 
@@ -170,7 +172,11 @@ class View{
           // Pressed is the keycode of user input, and keydown means the button is down rather than press ended
           input.keyboard(function(pressed, keydown) {
             if (!keydown) {
+                if(pressed == 8)
+                    pressed = 27
                 if(!player.inFight){
+                    //set le texte de fin a null
+                    endText = null
                     switch(pressed) {
                         // Move player
                         case 37://left
@@ -477,12 +483,30 @@ class View{
                     console.log("selector: "+selector + "  selectorMax: "+selectorMax);
                     player.updateFighters()
                     player.getInfosCombat()
+
+
                     if(player.getWinner() == "victory"){
                         player.inFight = false
-                    }else if(player.getWinner() == "defeat"){
+                        for (var i = 0; i < player.fighter.length; i++) {
+                            if(player.fighter[i].HP > 0)
+                                player.fighter[i].experience+=20
+                        }
 
+                    }else if(player.getWinner() == "defeat"){
+                        player.inFight = false
                     }
-                    console.log(player.getWinner());
+
+                    if(player.getWinner()){
+                        endText = player.getWinner()
+                        for (var i = 0; i < player.fighter.length; i++) {
+                            player.fighter[i].HP = player.fighter[i].HPMax
+                            player.fighter[i].MP = 0
+                            player.indexFighterCombat = 0
+                            menuFight.submenuItems[0].enabled = true
+                            menuFight.submenuItems[1].enabled = true
+                        }
+                    }
+
 
                 }
 
@@ -497,7 +521,7 @@ class View{
 /////////////////////////////////changer valeur du random pour rentrer en combat//////////////
           function startFight(){
               // si le joueur n'est pas sur le chemin
-              if(jsonResponse[0].ground[player.strGlobalX][player.strGlobalY][player.localY][player.localX] != 2 && Math.random() < 0.5){
+              if(jsonResponse[0].ground[player.strGlobalX][player.strGlobalY][player.localY][player.localX] != 2 && Math.random() < 0.1){
                   console.log("in Fight!")
                   player.inFight = true
                   player.generateEnnemies()
@@ -581,6 +605,7 @@ class View{
                   ctx.fillText("HP: "+player.fighter[i].HP+"/"+player.fighter[i].HPMax, 98+285*i, 774)
                   ctx.fillText("MP: "+player.fighter[i].MP+"/"+player.fighter[i].MPMax, 108+285*i, 804)
                   ctx.fillStyle="#FF0000"
+                  if(player.fighter[i].HP > 0)
                   ctx.fillRect(91+285*i, 756, player.fighter[i].HP/player.fighter[i].HPMax*98, 6)
                   ctx.fillStyle="#1111FF"
                   ctx.fillRect(101+285*i, 786, player.fighter[i].MP/player.fighter[i].MPMax*98, 6)
@@ -668,6 +693,15 @@ class View{
               for (var i = 0; i < player.arrayFighters.length; i++) {
                   player.arrayFighters[i].dammageDisplay.render(ctx)
               }
+              if(endText){
+                  ctx.fillStyle = "red"
+                  ctx.font = "140px Courier New"
+                  ctx.fillText(player.getWinner(), 300, 300)
+                  if(endText == "victory"){
+                      ctx.font = "50px Courier New"
+                      ctx.fillText("+ 20 xp", 500, 400)
+                  }
+              }
               requestAnimationFrame(tick)
           }
 
@@ -718,34 +752,35 @@ class View{
                     ctx.fillText("Nom : " + player.fighter[selectorFighter].name, 400, 190, 200, 200)
                     ctx.fillText("Classe : " + player.fighter[selectorFighter].job.name, 400, 220, 200, 200)
                     ctx.fillText("Niveau : "+player.fighter[selectorFighter].level, 400, 250, 200, 200)
+                    ctx.fillText("Experience : "+player.fighter[selectorFighter].experience + "/100", 400, 280, 200, 200)
                     ctx.font="16px Courier New"
-                    ctx.fillText("HP max : "+player.fighter[selectorFighter].HPMax, 300, 300, 200, 200)
-                    ctx.fillText("MP max : "+player.fighter[selectorFighter].MPMax, 300, 330, 200, 200)
-                    ctx.fillText("Attack : "+player.fighter[selectorFighter].getTotalAtk(), 300, 360, 200, 200)
-                    ctx.fillText("Defense : "+player.fighter[selectorFighter].getTotalDef(), 300, 390, 200, 200)
-                    ctx.fillText("Magie : "+player.fighter[selectorFighter].getTotalAtkM(), 300, 420, 200, 200)
-                    ctx.fillText("Defense magique: "+player.fighter[selectorFighter].getTotalDefM(), 300, 450, 200, 200)
-                    ctx.fillText("Vitesse : "+player.fighter[selectorFighter].getTotalSpeed(), 300, 480, 200, 200)
-                    ctx.fillText("Critique : "+player.fighter[selectorFighter].crit+"%", 300, 510, 200, 200)
+                    ctx.fillText("HP max : "+player.fighter[selectorFighter].HPMax, 300, 320, 200, 200)
+                    ctx.fillText("MP max : "+player.fighter[selectorFighter].MPMax, 300, 350, 200, 200)
+                    ctx.fillText("Attack : "+player.fighter[selectorFighter].getTotalAtk(), 300, 380, 200, 200)
+                    ctx.fillText("Defense : "+player.fighter[selectorFighter].getTotalDef(), 300, 410, 200, 200)
+                    ctx.fillText("Magie : "+player.fighter[selectorFighter].getTotalAtkM(), 300, 440, 200, 200)
+                    ctx.fillText("Defense magique: "+player.fighter[selectorFighter].getTotalDefM(), 300, 470, 200, 200)
+                    ctx.fillText("Vitesse : "+player.fighter[selectorFighter].getTotalSpeed(), 300, 500, 200, 200)
+                    ctx.fillText("Critique : "+player.fighter[selectorFighter].crit+"%", 300, 530, 200, 200)
                     if (player.fighter[selectorFighter].weapon) {
-                        ctx.fillText("Arme : "+player.fighter[selectorFighter].weapon.name, 600, 300, 200, 200)
+                        ctx.fillText("Arme : "+player.fighter[selectorFighter].weapon.name, 600, 320, 200, 200)
                     }else {
-                        ctx.fillText("Arme : None", 600, 300, 200, 200)
+                        ctx.fillText("Arme : None", 600, 320, 200, 200)
                     }
                     if (player.fighter[selectorFighter].headgear) {
-                        ctx.fillText("Tete : "+player.fighter[selectorFighter].headgear.name, 600, 350, 200, 200)
+                        ctx.fillText("Tete : "+player.fighter[selectorFighter].headgear.name, 600, 370, 200, 200)
                     }else {
-                        ctx.fillText("Tete : None", 600, 350, 200, 200)
+                        ctx.fillText("Tete : None", 600, 370, 200, 200)
                     }
                     if (player.fighter[selectorFighter].bodygear) {
-                        ctx.fillText("Corps : "+player.fighter[selectorFighter].bodygear.name, 600, 400, 200, 200)
+                        ctx.fillText("Corps : "+player.fighter[selectorFighter].bodygear.name, 600, 420, 200, 200)
                     }else {
-                        ctx.fillText("Corps : None", 600, 400, 200, 200)
+                        ctx.fillText("Corps : None", 600, 420, 200, 200)
                     }
                     if (player.fighter[selectorFighter].accessory) {
-                        ctx.fillText("Accessoire : "+player.fighter[selectorFighter].accessory.name, 600, 450, 200, 200)
+                        ctx.fillText("Accessoire : "+player.fighter[selectorFighter].accessory.name, 600, 470, 200, 200)
                     }else {
-                        ctx.fillText("Accessoire : None", 600, 450, 200, 200)
+                        ctx.fillText("Accessoire : None", 600, 470, 200, 200)
                     }
 
                     //////////Modif Fighters/////////

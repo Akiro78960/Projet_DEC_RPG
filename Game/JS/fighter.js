@@ -5,7 +5,7 @@ class Fighter{
         this.x = x || 0
         this.y = y || 0
         this.experience = 0
-        this.level = 1
+        this.level = 1 + Math.floor(this.experience/100)
         this.HPMax = HPMax || 30
         this.HP = this.HPMax
         this.MPMax = 25
@@ -43,9 +43,13 @@ class Fighter{
         }
     }
     attack(target){
-        console.log(Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef())));
-        target.HP -= Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))
-        return Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))
+        if(Math.random() < (this.crit/100)){
+            target.HP -= Math.floor((this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))*2)
+            return Math.floor((this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))*2)
+        }else{
+            target.HP -= Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))
+            return Math.floor(this.getTotalAtk()*this.getTotalAtk()/(this.getTotalAtk()+target.getTotalDef()))
+        }
     }
     getTotalAtk(){
         var tmp = 0
@@ -62,7 +66,7 @@ class Fighter{
         if(this.accessory){
             tmp += this.accessory.bonusAtk
         }
-        return tmp*this.job.atkMultiplier
+        return Math.floor((tmp+2*this.level)*this.job.atkMultiplier)
     }
     getTotalDef(){
         var tmp = 0
@@ -79,7 +83,7 @@ class Fighter{
         if(this.accessory){
             tmp += this.accessory.bonusDef
         }
-        return tmp*this.job.defMultiplier
+        return Math.floor((tmp+2*this.level)*this.job.defMultiplier)
     }
     getTotalAtkM(){
         var tmp = 0
@@ -96,7 +100,7 @@ class Fighter{
         if(this.accessory){
             tmp += this.accessory.bonusAtkM
         }
-        return tmp*this.job.atkMMultiplier
+        return Math.floor((tmp+2*this.level)*this.job.atkMMultiplier)
     }
     getTotalDefM(){
         var tmp = 0
@@ -113,7 +117,7 @@ class Fighter{
         if(this.accessory){
             tmp += this.accessory.bonusDefM
         }
-        return tmp*this.job.defMMultiplier
+        return Math.floor((tmp+2*this.level)*this.job.defMMultiplier)
     }
     getTotalSpeed(){
         var tmp = 0
@@ -130,7 +134,7 @@ class Fighter{
         if(this.accessory){
             tmp += this.accessory.bonusSpeed
         }
-        return tmp*this.job.speedMultiplier
+        return Math.floor((tmp+2*this.level)*this.job.speedMultiplier)
     }
     tick(){
         this.compteur++

@@ -8,7 +8,6 @@ class DammageDisplay{
     }
     tick(){
         this.compteur++
-        console.log(this.compteur);
     }
     render(ctx){
         if(this.compteur<= 60){
