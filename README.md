@@ -1,24 +1,8 @@
-# Projet_DEC_RPG
-Projet final de mon DEC, web based RPG en 2D Isometrique
-
-
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <title>Projet: RPG</title>
-        <link href="CSS/style.css" rel="stylesheet" />
-        <meta charset="utf-8"/>
-    </head>
-    <body>
-        <div class="menu">
-            <div class = "menu-item" id="item1"><a href="index.html">Acceuil</a></div>
-            <div class = "menu-item" id="item2"><a href="Game/index.html">Game</a></div>
-        </div>
-		<main>
             <h1>
                 Projet DEC: RPG Iso
             </h1>
-
 			<h2>Acceuil</h2>
 			<div class="text-intro">
 				RPG ISO est un RPG code dans le cadre du cours de B65_Synthese.
@@ -50,9 +34,5 @@ Projet final de mon DEC, web based RPG en 2D Isometrique
                 </video>
                 <br>
                 Je voudrais remercier tout les profs d'informatique du CVM, ainsi que Beakers pour sa librairie JSISO, qui m'a aide a faire ma representation en 2D isometrique:<a href="http://jsiso.com/"> JSISO website</a>
-
-
-		</main>
         Coordonees: clo.perin@gmail.com
-    </body>
 </html>
